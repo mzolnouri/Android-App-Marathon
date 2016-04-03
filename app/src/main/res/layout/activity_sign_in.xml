@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtVwWelcomeMsg"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Welcome to Marathon application"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textColor="#0b1"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/txtVwSignInToAccountMsg"
+        android:layout_below="@+id/txtVwWelcomeMsg"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Sign in to your account"
+        android:gravity="center"
+        />
+    <EditText
+        android:id="@+id/edtTxtEmailMMenu"
+        android:layout_below="@+id/txtVwSignInToAccountMsg"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        />
+    <EditText
+        android:id="@+id/edtTxtPasswordMMenu"
+        android:layout_below="@+id/edtTxtEmailMMenu"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Password"
+        android:inputType="textPassword"
+        />
+    <Button
+        android:id="@+id/btnSignInMMenu"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/edtTxtPasswordMMenu"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Sign In"
+        android:enabled="true"
+        tools:ignore="UnknownId" />
+    <TextView
+        android:id="@+id/txtVwEmptySpaceMMenu"
+        android:layout_below="@+id/btnSignInMMenu"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:gravity="center"
+        />
+    <TextView
+        android:id="@+id/txtVwSingUpMsgMMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp"
+        android:text="New to Marathon App?"
+        android:gravity="center"
+        android:layout_below="@+id/txtVwEmptySpaceMMenu"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:id="@+id/btnSignUpMMenu"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:onClick="SignUp"
+        android:text="Sign up for a new account"
+        android:layout_below="@+id/txtVwSingUpMsgMMenu"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
