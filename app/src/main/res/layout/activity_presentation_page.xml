@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mahdi.keepwalking.Main">
+    tools:context="com.example.mahdi.keepwalking.Main"
+    android:background="@android:color/transparent">
 
     <TextView
         android:id="@+id/txtVwGoToSignInPP"
@@ -23,12 +24,11 @@
         />
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="210dp"
-        android:id="@+id/imgVwPP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_background"
         android:src="@mipmap/ic_launcher"
         android:layout_below="@+id/txtVwGoToSignInPP"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="50dp" />
+        android:scaleType="center"
+        />
 </RelativeLayout>

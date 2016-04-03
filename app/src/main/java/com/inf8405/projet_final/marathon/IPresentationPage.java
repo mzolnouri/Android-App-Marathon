@@ -1,10 +1,17 @@
 package com.inf8405.projet_final.marathon;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -25,8 +32,23 @@ public class IPresentationPage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        /* create a full screen window */
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presentation_page);
+        /* adapt the image to the size of the display */
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                getResources(), R.drawable.background),size.x,size.y,true);
+
+    /* fill the background ImageView with the resized image */
+        ImageView iv_background = (ImageView) findViewById(R.id.iv_background);
+        iv_background.setImageBitmap(bmp);
 
 
     }
@@ -46,7 +68,7 @@ public class IPresentationPage extends AppCompatActivity {
         initializeTimerTask();
 
         //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 1000); //
+        timer.schedule(timerTask, 2000); //
     }
 
     public void stoptimertask(View v) {
