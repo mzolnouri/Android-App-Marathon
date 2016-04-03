@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':json-20151123', ':okhttp-3.2.0'
