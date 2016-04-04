@@ -21,8 +21,12 @@ public class LocalDBManager extends SQLiteOpenHelper{
     public static final String COLUMN2="";
     public static final String COLUMN3="";
 
-    // list des elements
-    List<Participant> listParticipant=new ArrayList<Participant>();
+    // list des elements todo sera possiblement supprimer
+    private List<Participant> listParticipant=new ArrayList<Participant>();
+
+    // cette liste sera utilise pour mettre a jour la db apres reconnection
+    // pour ne pas avoir a prendre une list de chaque categorie a la fois
+    private List<Object> listAllElement = new ArrayList<Object>();
 
 
     public LocalDBManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -31,7 +35,12 @@ public class LocalDBManager extends SQLiteOpenHelper{
         this.getListParticipant();
     }
 
+    public List<Object> getListAllElement() {
+        return listAllElement;
+    }
+
     @Override
+
     public void onCreate(SQLiteDatabase db) {
         // creation de table
         // TODO creatyion des autres tables et verifications des noms des colomns
@@ -59,6 +68,7 @@ public class LocalDBManager extends SQLiteOpenHelper{
         db.insert(TABLE_RUNNNERS, null, contentValues);
         // l'ajouter a la list actuelle
         listParticipant.add(participant);
+        listAllElement.add(participant);
         db.close();
 
     }
@@ -76,6 +86,7 @@ public class LocalDBManager extends SQLiteOpenHelper{
             db.delete(TABLE_RUNNNERS, COLUMN1 + " = ?", new String[]{idElement});
             // le supprimer de la liste actuelle
             listParticipant.remove(participant);
+            listAllElement.remove(participant);
             cursor.close();
             result=true;
         }
@@ -102,6 +113,7 @@ public class LocalDBManager extends SQLiteOpenHelper{
                 Participant participant= new Participant();
                 participant.setId(cursor.getString(0));
                 listParticipant.add(participant);
+                listAllElement.add(participant);
             }
         }
         return listParticipant;
