@@ -2,6 +2,8 @@
     <string name="app_name">Marathon</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_sign_in">Sign in</string>
+    <string name="title_activity_sign_up">Sign up</string>
+    <string name="title_activity_find_location">Find location</string>
 
     <!-- Error message -->
     <string name="ERROR_INVALID_PASSWORD">Password invalid</string>
@@ -13,4 +15,9 @@
     <string name="error_password_not_matches">Password not confirm</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_imain_menu">IMainMenu</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
