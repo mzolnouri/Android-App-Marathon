@@ -21,4 +21,15 @@ public class DBContent {
 
     private DBContent() {
     }
+
+    public Participant getActualParticipant() {
+        // To Do
+        return null;
+    }
+
+    public void updateParticipantInformationInRemoteContent(){
+        // To Do
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.inf8405.projet_final.marathon;
 
+import android.graphics.Bitmap;
+
 import java.util.UUID;
 
 /**
@@ -92,5 +94,14 @@ public class Participant {
 
     public void setClassement(int classement) {
         this.classement_ = classement;
+    }
+
+    public Bitmap getPhotoEnBitmap(){
+        // To Do
+        return null;
+    }
+
+    public void setPhotoEnBitmap(Bitmap bitmap){
+        // To Do
     }
 }

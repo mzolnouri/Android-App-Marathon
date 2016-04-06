@@ -4,6 +4,7 @@
     <string name="title_activity_sign_in">Sign in</string>
     <string name="title_activity_sign_up">Sign up</string>
     <string name="title_activity_find_location">Find location</string>
+    <string name="title_activity_edit_profile">Edit profile</string>
 
     <!-- Error message -->
     <string name="ERROR_INVALID_PASSWORD">Password invalid</string>

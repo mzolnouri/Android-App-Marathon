@@ -83,6 +83,11 @@
             android:name=".IMainMenu"
             android:label="@string/title_activity_imain_menu"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".IEditProfile"
+            android:label="@string/title_activity_edit_profile" />
+
+
     </application>
 
 </manifest>
