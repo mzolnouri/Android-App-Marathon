@@ -4,7 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#faa">
+    tools:context=".MainScreen"
+    android:background="@drawable/signup_bg">
 
     <ImageView
         android:id="@+id/imgVwProfileImgSU"
