@@ -24,20 +24,20 @@ public class FNavHome extends Fragment {
         homeView = inflater.inflate(R.layout.activity_nav_home, container, false);
 
         /* Manage the preferences button */
-        mBtnFindPark = (Button) homeView.findViewById(R.id.btn0H);
-        mBtnFindPark.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FindParkingClicked(v);
-            }
-        });
-
-        /* Manage the preferences button */
-        mBtnQuitPark = (Button) homeView.findViewById(R.id.btn1H);
-        mBtnQuitPark.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                QuitParkingClicked(v);
-            }
-        });
+//        mBtnFindPark = (Button) homeView.findViewById(R.id.btn0H);
+//        mBtnFindPark.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                FindParkingClicked(v);
+//            }
+//        });
+//
+//        /* Manage the preferences button */
+//        mBtnQuitPark = (Button) homeView.findViewById(R.id.btn1H);
+//        mBtnQuitPark.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                QuitParkingClicked(v);
+//            }
+//        });
 
         return homeView;
     }
