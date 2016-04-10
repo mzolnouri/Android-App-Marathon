@@ -16,7 +16,7 @@
             android:id="@+id/LL_1stNTS_DM">
 
             <TextView
-                android:id="@+id/txtVw_1stNTS_DM"
+                android:id="@+id/TV_1stNTS_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -24,12 +24,12 @@
                 android:text="1st : " />
 
             <TextView
-                android:id="@+id/txtVw_1stNTS_Value_DM"
+                android:id="@+id/TV_1stNTS_Value_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_toRightOf="@+id/txtVw_1stNTS_DM"
+                android:layout_toRightOf="@+id/TV_1stNTS_DM"
                 android:text=" ... " />
         </LinearLayout>
 
@@ -39,7 +39,7 @@
             android:id="@+id/LL_Dis_DM"
             android:layout_below="@+id/LL_1stNTS_DM">
             <TextView
-                android:id="@+id/txtVw_Dis_DM"
+                android:id="@+id/TV_Dis_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -47,12 +47,12 @@
                 android:text="Distance : " />
 
             <TextView
-                android:id="@+id/txtVw_Dis_Value_DM"
+                android:id="@+id/TV_Dis_Value_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/txtVw_Dis_DM"
+                android:layout_toRightOf="@+id/TV_Dis_DM"
                 android:text=" ... " />
         </LinearLayout>
 
@@ -62,7 +62,7 @@
             android:id="@+id/LL_Temp_DM"
             android:layout_below="@+id/LL_Dis_DM">
             <TextView
-                android:id="@+id/txtVw_Temp_DM"
+                android:id="@+id/TV_Temp_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -70,12 +70,12 @@
                 android:text="Temperture : " />
 
             <TextView
-                android:id="@+id/txtVw_Temp_Value_DM"
+                android:id="@+id/TV_Temp_Value_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/txtVw_Temp_DM"
+                android:layout_toRightOf="@+id/TV_Temp_DM"
                 android:text=" ... " />
         </LinearLayout>
         <LinearLayout
@@ -85,7 +85,7 @@
             android:layout_below="@+id/LL_Temp_DM">
 
             <TextView
-                android:id="@+id/txtVw_Hum_DM"
+                android:id="@+id/TV_Hum_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -93,12 +93,12 @@
                 android:text="Humidity : " />
 
             <TextView
-                android:id="@+id/txtVw_Hum_Value_DM"
+                android:id="@+id/TV_Hum_Value_DM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/txtVw_Hum_DM"
+                android:layout_toRightOf="@+id/TV_Hum_DM"
                 android:text=" ... " />
         </LinearLayout>
 
@@ -133,12 +133,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@+id/FL_Map_DM"
-            tools:context=".IMainMenu"></fragment>
+            tools:context=".IDisplayMarathon"></fragment>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/map"
+            android:layout_below="@+id/MAP_DM"
             android:text=""></TextView>
 
     </RelativeLayout>

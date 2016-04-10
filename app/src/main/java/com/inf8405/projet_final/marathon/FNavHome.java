@@ -3,6 +3,7 @@ package com.inf8405.projet_final.marathon;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -67,7 +68,7 @@ public class FNavHome extends Fragment {
 
         this.fArrayList = new ArrayList<String>();
         fArrayList.addAll(fMarathons);
-        
+
         /* </Just for test> */
 
 //        Map<String,Marathon> myMap=DBContent.getInstance().GetMarathonMap(DBContent.getInstance().getActualParticipant().getId());
@@ -100,6 +101,7 @@ public class FNavHome extends Fragment {
                     //DBContent dbContent=DBContent.getInstance();
                     //Marathon marathonData = fMarathons.get(i);
                     Toast.makeText(getContext(), "You've selected: " + fMarathons.get(i), Toast.LENGTH_LONG).show();
+                    ShowMarathonPath(view, i);
                 }
             });
 
@@ -141,15 +143,12 @@ public class FNavHome extends Fragment {
         }
         fMarathonAdapter.notifyDataSetChanged();
     }
-    public void QuitParkingClicked (View view) {
-        //Intent i = new Intent(getActivity(), IDisplayRoute.class);
-        //startActivity(i);
-
-    }
-
-    public void FindParkingClicked(View view) {
-        //Intent i = new Intent(getActivity(), MainActivity.class);
-        //startActivity(i);
+    public void ShowMarathonPath (View view, int index) {
+        Intent i = new Intent(getActivity(), IDisplayMarathon.class);
+        Bundle marathonName = new Bundle();
+        marathonName.putString("marathonName", fMarathons.get(index));
+        i.putExtras(marathonName);
+        startActivity(i);
 
     }
 

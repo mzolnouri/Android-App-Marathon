@@ -61,6 +61,19 @@
             android:name=".ISignUp"
             android:label="@string/title_activity_sign_up" />
         <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".IMainMenu"
+            android:label="@string/title_activity_imain_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".IEditProfile"
+            android:label="@string/title_activity_edit_profile" />
+        <activity
+            android:name=".IDisplayMarathon"
+            android:label="@string/title_activity_display_marathon" />
+        <activity
             android:name=".MFindLocation"
             android:label="@string/title_activity_find_location" />
 
@@ -75,18 +88,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".IMainMenu"
-            android:label="@string/title_activity_imain_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".IEditProfile"
-            android:label="@string/title_activity_edit_profile" />
-
 
     </application>
 
