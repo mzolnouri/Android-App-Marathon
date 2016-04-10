@@ -1,5 +1,7 @@
 package com.inf8405.projet_final.marathon;
 
+import java.util.Map;
+
 /**
  * Created by youssef on 04/04/2016.
  */
@@ -29,6 +31,11 @@ public class DBContent {
 
     public void updateParticipantInformationInRemoteContent(){
         // To Do
+    }
+
+    public Map<String,Marathon> GetMarathonMap(String participantId){
+        // To Do
+        return null;
     }
 
 

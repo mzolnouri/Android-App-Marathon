@@ -43,7 +43,7 @@
         </FrameLayout>
 
         <ListView
-            android:id="@+id/lstVwcontacts_list"
+            android:id="@+id/lstVw_Marathons_FNH"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/frmLyoutContacts"

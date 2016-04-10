@@ -1,0 +1,160 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        tools:context=".IDisplayMarathon">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_1stNTS_DM">
+
+            <TextView
+                android:id="@+id/txtVw_1stNTS_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="1st : " />
+
+            <TextView
+                android:id="@+id/txtVw_1stNTS_Value_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/txtVw_1stNTS_DM"
+                android:text=" ... " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Dis_DM"
+            android:layout_below="@+id/LL_1stNTS_DM">
+            <TextView
+                android:id="@+id/txtVw_Dis_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Distance : " />
+
+            <TextView
+                android:id="@+id/txtVw_Dis_Value_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/txtVw_Dis_DM"
+                android:text=" ... " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Temp_DM"
+            android:layout_below="@+id/LL_Dis_DM">
+            <TextView
+                android:id="@+id/txtVw_Temp_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Temperture : " />
+
+            <TextView
+                android:id="@+id/txtVw_Temp_Value_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/txtVw_Temp_DM"
+                android:text=" ... " />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Humidity_DM"
+            android:layout_below="@+id/LL_Temp_DM">
+
+            <TextView
+                android:id="@+id/txtVw_Hum_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Humidity : " />
+
+            <TextView
+                android:id="@+id/txtVw_Hum_Value_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/txtVw_Hum_DM"
+                android:text=" ... " />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="2.1">
+
+        <FrameLayout
+            android:id="@+id/FL_Map_DM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5b74a8">
+
+            <TextView
+                android:id="@+id/TV_TileToolBarMap_DM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Display marathon path on Google Maps"
+                android:textColor="#000"
+                android:textSize="16dp"></TextView>
+        </FrameLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/MAP_DM"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/FL_Map_DM"
+            tools:context=".IMainMenu"></fragment>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/map"
+            android:text=""></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="5">
+
+        <Button
+            android:id="@+id/BTN_Return_DM"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:text="Retrun to main menu" />
+
+
+    </RelativeLayout>
+</LinearLayout>

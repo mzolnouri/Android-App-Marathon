@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/L1_EMIL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:id="@+id/L1_1_EMIL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2.6"
+            android:layout_margin="5dp"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtVw_MarathonName_EMIL"
+                android:text="Marathon name : "
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/TV_MarathonDis_EMIL"
+                android:layout_marginTop="10dp"
+                android:text="Marathon distatnce (Km): "
+                android:textSize="13dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/L1_2_EMIL"
+            android:layout_weight="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:layout_width="350dp"
+                android:layout_height="35dp"
+                android:id="@+id/CKBX_Marathon__EMIL" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
