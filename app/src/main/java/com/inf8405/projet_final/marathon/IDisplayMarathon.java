@@ -4,50 +4,64 @@ package com.inf8405.projet_final.marathon;
 // INF8405 - Laboratoire 2
 //Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
 
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.IntentSender;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
+import android.app.FragmentManager;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
 
-public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener , SensorEventListener{
-
-    private GoogleApiClient fGoogleApiClient;
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private LocationRequest fLocationRequest;
-    public static final String TAG = IDisplayMarathon.class.getSimpleName();
+public class IDisplayMarathon extends Activity {
+    final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
+    double fStartPointLatitude = 45.5024062;
+    double fStartPointLongitude = -73.6282954;
+    double fEndPointLatitude = 45.5006058;
+    double fEndPointLongitude = -73.6262171;
     private String fMarathonName;
     private TextView f1stNom = null;
     private TextView fDistance = null;
@@ -59,24 +73,8 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
     private String fStartPoint = "2500, chemin de Polytechnique, Montreal, Canada";
     private String fEndPoint = "5700 Chemin Cote-Des-Neiges, Montreal, Canada";
     private String latLongFromAdd = "";
-    private double fCurrentLatitude = 0.0;
-    private double fCurrentLongitude = 0.0;
-    private double fStartPointLatitude = 0.0;
-    private double fStartPointLongitude = 0.0;
-    private double fEndPointLatitude = 0.0;
-    private double fEndPointLongitude = 0.0;
+    MarkerOptions markerOptions;
     private GeocodingLocation fLocationAddress;
-    private ArrayList<LatLng> fPoints;
-    private Route fRoute;
-
-    /* Temperature sensor*/
-    private SensorManager mSensorManager;
-    private Sensor mTemperature;
-    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, sensor not available for this device.";
-
-    /* Pop up */
-    ContentResolver fResolver;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,34 +83,18 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
 
-        // Create the LocationRequest object
-        fLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        FragmentManager myFragmentManager = getFragmentManager();
+        MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DM);
+        fMap = myMapFragment.getMap();
 
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.MAP_DM);
-        mapFragment.getMapAsync(this);
-        fGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
-
-        fResolver = this.getContentResolver();
         f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Value_DM);
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DM);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DM);
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-            mTemperature= mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);	// requires API level 14.
-        }
-        if (mTemperature == null) {
-            fTemp.setText(NOT_SUPPORTED_MESSAGE);
-        }
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DM);
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
-//        fTemp.setText("Pas encore calculé!");
+        fTemp.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
 
         fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DM);
@@ -150,54 +132,21 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
 //        float zoomLevelEP = 16; //This goes up to 21
 //        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngEP, zoomLevelEP));
 
-        fPoints = new ArrayList<>();
-        fRoute = new Route();
 
 
-    }
+        LatLng srcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
+        LatLng destLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //setUpMapIfNeeded();
-        fGoogleApiClient.connect();
-        mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
-    }
+        fMap.addMarker(new MarkerOptions()
+                .position(srcLatLng).title("Source place"));
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (fGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(fGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
-            fGoogleApiClient.disconnect();
-        }
-        mSensorManager.unregisterListener(this);
-    }
+        fMap.animateCamera(CameraUpdateFactory.newLatLng(srcLatLng));
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
+        fMap.addMarker(new MarkerOptions()
+                .position(destLatLng).title("Destination place"));
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        /* Do nothing at this moment */
-        fMap = googleMap;
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(TAG, "Location services connected.");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Enabling MyLocation in Google Map
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -207,96 +156,206 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location location = LocationServices.FusedLocationApi.getLastLocation(fGoogleApiClient);
-        if (location == null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(fGoogleApiClient, fLocationRequest, (com.google.android.gms.location.LocationListener) this);
-        } else {
-            handleNewLocation(location);
+        fMap.setMyLocationEnabled(true);
+        fMap.getUiSettings().setZoomControlsEnabled(true);
+        fMap.getUiSettings().setCompassEnabled(true);
+        fMap.getUiSettings().setMyLocationButtonEnabled(true);
+        fMap.getUiSettings().setAllGesturesEnabled(true);
+        fMap.setTrafficEnabled(true);
+        fMap.animateCamera(CameraUpdateFactory.newLatLngZoom(srcLatLng, 12));
+        markerOptions = new MarkerOptions();
+
+
+        // Polyline line = fMap.addPolyline(new PolylineOptions().add(srcLatLng, destLatLng).width(5).color(Color.RED));
+
+        connectAsyncTask _connectAsyncTask = new connectAsyncTask();
+        _connectAsyncTask.execute();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_menu_display_route, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_legalnotices:
+                String LicenseInfo = GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(
+                        getApplicationContext());
+                AlertDialog.Builder LicenseDialog = new AlertDialog.Builder(IDisplayMarathon.this);
+                LicenseDialog.setTitle("Legal Notices");
+                LicenseDialog.setMessage(LicenseInfo);
+                LicenseDialog.show();
+                return true;
         }
-        ;
-    }
-
-    private void handleNewLocation(Location location) {
-        Log.d(TAG, location.toString());
-        /* get longitude and latitude of current location */
-        fCurrentLatitude = location.getLatitude();
-        fCurrentLongitude = location.getLongitude();
-        /* Display current location flag */
-        LatLng latLngCL = new LatLng(fCurrentLatitude, fCurrentLongitude);
-        MarkerOptions optionsCL = new MarkerOptions().position(latLngCL).title("Start point");
-        fMap.addMarker(optionsCL);
-        float zoomLevelCL = 16; //This goes up to 21
-        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngCL, zoomLevelCL));
-
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Location services suspended. Please reconnect.");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        handleNewLocation(location);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-
-        // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    protected void onResume() {
         // TODO Auto-generated method stub
+        super.onResume();
+
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+
+        if (resultCode == ConnectionResult.SUCCESS){
+            Toast.makeText(getApplicationContext(),
+                    "isGooglePlayServicesAvailable SUCCESS",
+                    Toast.LENGTH_LONG).show();
+        }else{
+            GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
+        }
+
     }
 
+    private class connectAsyncTask extends AsyncTask<Void, Void, Void>{
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        float ambient_temperature = event.values[0];
-        fTemp.setText( String.valueOf(ambient_temperature) + getResources().getString(R.string.celsius));
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(IDisplayMarathon.this);
+            progressDialog.setMessage("Fetching route, Please wait...");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            fetchData();
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            if(doc!=null){
+                NodeList _nodelist = doc.getElementsByTagName("status");
+                Node node1 = _nodelist.item(0);
+                String _status1 = node1.getChildNodes().item(0).getNodeValue();
+                if(_status1.equalsIgnoreCase("OK")){
+                    NodeList _nodelist_path = doc.getElementsByTagName("overview_polyline");
+                    Node node_path = _nodelist_path.item(0);
+                    Element _status_path = (Element)node_path;
+                    NodeList _nodelist_destination_path = _status_path.getElementsByTagName("points");
+                    Node _nodelist_dest = _nodelist_destination_path.item(0);
+                    String _path = _nodelist_dest.getChildNodes().item(0).getNodeValue();
+                    List<LatLng> directionPoint = decodePoly(_path);
+
+                    PolylineOptions rectLine = new PolylineOptions().width(10).color(Color.RED);
+                    for (int i = 0; i < directionPoint.size(); i++) {
+                        rectLine.add(directionPoint.get(i));
+                    }
+                    // Adding route on the map
+                    fMap.addPolyline(rectLine);
+                    markerOptions.position(new LatLng(fEndPointLatitude, fEndPointLongitude));
+                    markerOptions.draggable(true);
+                    fMap.addMarker(markerOptions);
+                }else{
+                    showAlert("Unable to find the route");
+                }
+
+
+            }else{
+                showAlert("Unable to find the route");
+            }
+
+            progressDialog.dismiss();
+
+        }
+
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Do something here if sensor accuracy changes.
-    }
-    public String makeURL (double sourcelat, double sourcelog, double destlat, double destlog ){
+    Document doc = null;
+    private void fetchData()
+    {
         StringBuilder urlString = new StringBuilder();
-        urlString.append("http://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
+        urlString.append("http://maps.google.com/maps/api/directions/xml?origin=");
+        urlString.append(fStartPointLatitude);
         urlString.append(",");
-        urlString
-                .append(Double.toString( sourcelog));
-        urlString.append("&destination=");// to
-        urlString
-                .append(Double.toString( destlat));
+        urlString.append(fStartPointLongitude);
+        urlString.append("&destination=");//to
+        urlString.append(fEndPointLatitude);
         urlString.append(",");
-        urlString.append(Double.toString( destlog));
-        urlString.append("&sensor=false&mode=driving&alternatives=true");
-        urlString.append("&key=YOUR_API_KEY");
-        return urlString.toString();
+        urlString.append(fEndPointLongitude);
+        urlString.append("&sensor=true&mode=driving");
+        Log.d("url","::"+urlString.toString());
+        HttpURLConnection urlConnection= null;
+        URL url = null;
+        try
+        {
+            url = new URL(urlString.toString());
+            urlConnection=(HttpURLConnection)url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            doc = (Document) db.parse(urlConnection.getInputStream());//Util.XMLfromString(response);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ParserConfigurationException e){
+            e.printStackTrace();
+        }
+        catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
+
+    private void showAlert(String message){
+        AlertDialog.Builder alert = new AlertDialog.Builder(IDisplayMarathon.this);
+        alert.setTitle("Error");
+        alert.setCancelable(false);
+        alert.setMessage(message);
+        alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        alert.show();
+    }
+
+    private ArrayList<LatLng> decodePoly(String encoded) {
+        ArrayList<LatLng> poly = new ArrayList<LatLng>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng position = new LatLng((double) lat / 1E5, (double) lng / 1E5);
+            poly.add(position);
+        }
+        return poly;
+    }
     private class GeocoderHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
@@ -319,12 +378,12 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
                 fMap.addMarker(options);
                 float zoomLevel = 16; //This goes up to 21
                 fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
-                fPoints.add(latLng);
+                //fPoints.add(latLng);
                 //if(fPoints.size() > 1)
                 //    fRoute.drawRoute(fMap, getApplicationContext(), fPoints, "en", false);
 
             }else{
-                LatLng latLng = new LatLng(fCurrentLatitude, fCurrentLongitude);
+                LatLng latLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
                 MarkerOptions options = new MarkerOptions().position(latLng).title("Actual location");
                 fMap.addMarker(options);
                 float zoomLevel = 16; //This goes up to 21
@@ -333,6 +392,5 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
 
         }
     }
-
 
 }
