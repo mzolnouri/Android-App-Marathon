@@ -21,6 +21,8 @@ public class Position {
     private Double humidity = new Double(0.0);
     private Double speed = new Double(0.0);
     private Date date_;
+    private String time=new String();
+    private String day=new String();
 
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
 
@@ -121,6 +123,18 @@ public class Position {
 
     public void setSpeed(Double speed) {
         this.speed = speed;
+    }
+
+    public String getTime() {
+        DateFormat ttime=new SimpleDateFormat("hh:mm:ss");
+        time=ttime.format(date_);
+        return time;
+    }
+
+    public String getDay() {
+        DateFormat dday=new SimpleDateFormat("yyyy-M-dd");
+        day=dday.format(date_);
+        return day;
     }
 
 }

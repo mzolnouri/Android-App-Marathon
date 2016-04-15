@@ -68,7 +68,7 @@ public class LocalDBManager extends SQLiteOpenHelper{
     // cette liste sera utilise pour mettre a jour la db apres reconnection
     // pour ne pas avoir a prendre une list de chaque categorie a la fois
     private List<Object> listAllElement = new ArrayList<Object>();
-
+    private List<String> listRequests=new ArrayList<String>();
 
     public LocalDBManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -84,7 +84,7 @@ public class LocalDBManager extends SQLiteOpenHelper{
 
     public void onCreate(SQLiteDatabase db) {
         // creation de table
-        // TODO creatyion des autres tables et verifications des noms des colomns
+
         String createMarathonTable="CREATE TABLE IF NOT EXISTS" +
                 TABLE_MARATHON + "(" +
                 idmarathon + " varchar(255) NOT NULL," +
@@ -153,15 +153,54 @@ public class LocalDBManager extends SQLiteOpenHelper{
     {
         ContentValues contentValues=new ContentValues();
 
-        contentValues.put(COLUMN1,"");
-        contentValues.put(COLUMN2,"");
-        contentValues.put(COLUMN3, "");
+        contentValues.put(idparticipant, participant.getId());
+        contentValues.put(courriel, participant.getCourriel());
+        contentValues.put(photo,participant.getPhotoEn64());
+        contentValues.put(position_idposition, participant.getPosition().getId());
+        contentValues.put(password, participant.getPassword());
 
         SQLiteDatabase db=this.getWritableDatabase();
-        db.insert(TABLE_RUNNNERS, null, contentValues);
-        // l'ajouter a la list actuelle
-        listParticipant.add(participant);
-        listAllElement.add(participant);
+        db.insert(TABLE_PARTICIPANT, null, contentValues);
+        String requette="INSERT INTO `participant` (`idparticipant`, `courriel`, `photo`, `position_idposition`, `password`) VALUES " +
+                "('" + participant.getId() + "', '"
+                +participant.getCourriel()+  "', '"
+                +participant.getPhotoEn64() + "', '"
+                +participant.getPosition().getId()+"', '"
+                +participant.getPassword()+"')";
+        listRequests.add(requette);
+
+        db.close();
+
+    }
+
+    public void ajouterElement(Position position)
+    {
+        ContentValues contentValues=new ContentValues();
+
+        contentValues.put(idposition, position.getId());
+        contentValues.put(latitude, position.getLatitude());
+        contentValues.put(longitude, position.getLongitude());
+        contentValues.put(radius, position.getRadius());
+        contentValues.put(position_time,position.getTime());
+        contentValues.put(temperature,position.getTemperature());
+        contentValues.put(humidity,position.getHumidity());
+        contentValues.put(speed,position.getSpeed());
+        contentValues.put(date_position, position.getDay());
+
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.insert(TABLE_POSITION, null, contentValues);
+        String requette="INSERT INTO `position` (`idposition`, `latitude`, `longitude`, `radius`, `position_time`, `temperature`, `humidity`, `speed`, `date_position`) VALUES " +
+                "('" + position.getId() + "', '"
+                +position.getLatitude()+ "', '"
+                +position.getLongitude()+  "', '"
+                +position.getRadius()+  "', '"
+                +position.getTime()+  "', '"
+                +position.getTemperature()+  "', '"
+                +position.getHumidity() + "', '"
+                +position.getSpeed()+"', '"
+                +position.getDay()+"')";
+        listRequests.add(requette);
+
         db.close();
 
     }
