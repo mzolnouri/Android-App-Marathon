@@ -16,8 +16,6 @@ public class Participant {
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
     private Position position_=new Position();
     private double distanceParcourue_=0.0;
-    private double vitesse_=0.0;
-    private double vitesseMoyenne_=0.0;
     private int classement_=0;
 
     public Participant()
@@ -46,22 +44,6 @@ public class Participant {
 
     public void setDistanceParcourue(double distanceParcourue) {
         this.distanceParcourue_ = distanceParcourue;
-    }
-
-    public double getVitesse() {
-        return vitesse_;
-    }
-
-    public void setVitesse(double vitesse) {
-        this.vitesse_ = vitesse;
-    }
-
-    public double getVitesseMoyenne() {
-        return vitesseMoyenne_;
-    }
-
-    public void setVitesseMoyenne(double vitesseMoyenne) {
-        this.vitesseMoyenne_ = vitesseMoyenne;
     }
 
     public String getNom() {

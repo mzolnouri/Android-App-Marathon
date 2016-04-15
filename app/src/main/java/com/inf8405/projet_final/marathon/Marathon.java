@@ -1,5 +1,7 @@
 package com.inf8405.projet_final.marathon;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -13,11 +15,12 @@ public class Marathon {
     private Double distance_=new Double(0.0);
     private int nbParticipant_=0;
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
-    private Temperature temperature_=new Temperature();
+    private Date date_;
 
     public Marathon()
     {
         id_=uidFormat_.randomUUID().toString();
+        date_= Calendar.getInstance().getTime();
     }
 
     public String getId() {
@@ -66,13 +69,5 @@ public class Marathon {
 
     public void setNbParticipant(int nbParticipant) {
         this.nbParticipant_ = nbParticipant;
-    }
-
-    public Temperature getTemperature() {
-        return temperature_;
-    }
-
-    public void setTemperature(Temperature temperature) {
-        this.temperature_ = temperature;
     }
 }

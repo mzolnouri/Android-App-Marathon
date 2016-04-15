@@ -9,17 +9,58 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LocalDBManager extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION=1;
     private static final String DATABASE_NAME="Marathon.db";
-    private static final String TABLE_RUNNNERS="participants";
+    private static final String TABLE_PARTICIPANT="participant";
+    private static final String TABLE_MARATHON="marathon";
+    private static final String TABLE_MARATHON_HAS_PARTICIPANT="marathon_has_participant";
+    private static final String TABLE_POSITION= "position";
 
-    public static final String COLUMN1="";
-    public static final String COLUMN2="";
-    public static final String COLUMN3="";
+    // table marathon colonne
+    public static final String idmarathon="idmarathon";
+    public static final String nom="nom";
+    public static final String marathon_date="marathon_date";
+    public static final String distance="distance";
+    public static final String position_depart="position_depart";
+    public static final String position_arrivee="position_arrivee";
+    /*public static final String temperature="temperature";
+    public static final String humidity="humidity";*/
+
+    // table has participant colonne
+
+
+    public static final String marathon_idmarathon="marathon_idmarathon";
+    public static final String participant_idparticipant="participant_idparticipant";
+    public static final String rank="rank";
+    public static final String average_speed="average_speed";
+    public static final String distance_run="distance_run";
+
+    // table participant
+    public static final String idparticipant="idparticipant";
+    public static final String courriel="courriel";
+    public static final String photo="photo";
+    public static final String position_idposition="position_idposition";
+    public static final String password="password";
+
+    // table position
+    public static final String idposition="idposition";
+    public static final String latitude="latitude";
+    public static final String longitude="longitude";
+    public static final String radius="radius";
+    public static final String position_time="position_time";
+    public static final String temperature="temperature";
+    public static final String humidity="humidity";
+    public static final String speed="speed";
+    public static final String date_position="date_position";
+
+    // element constant
+
+    public static final String PRIMARY_KEY="PRIMARY KEY";
 
     // list des elements todo sera possiblement supprimer
     private List<Participant> listParticipant=new ArrayList<Participant>();
@@ -44,10 +85,62 @@ public class LocalDBManager extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         // creation de table
         // TODO creatyion des autres tables et verifications des noms des colomns
-        String createRunnersTable="CREATE TABLE IF NOT EXISTS" +
-                TABLE_RUNNNERS + "(" + COLUMN1 + " TEXT," + COLUMN2 + " TEXT," + COLUMN3+" TEXT)";
+        String createMarathonTable="CREATE TABLE IF NOT EXISTS" +
+                TABLE_MARATHON + "(" +
+                idmarathon + " varchar(255) NOT NULL," +
+                nom + " varchar(255) NOT NULL," +
+                marathon_date + " date NOT NULL,"+
+                distance + " double DEFAULT NULL,"+
+                position_depart+" text NOT NULL,"+
+                position_arrivee+" text NOT NULL,"+
+                temperature+" double NOT NULL,"+
+                humidity+" double NOT NULL,"+
+                PRIMARY_KEY+ " ("+ idmarathon+")" +
+                "UNIQUE KEY `idmarathon_UNIQUE` ("+idmarathon+")" +
+                ")";
 
-        db.execSQL(createRunnersTable);
+        String createMarathonHasParticipantTable= "CREATE TABLE IF NOT EXISTS" +
+                TABLE_MARATHON_HAS_PARTICIPANT + "(" +
+                marathon_idmarathon + " varchar(255) NOT NULL," +
+                participant_idparticipant + " varchar(255) NOT NULL," +
+                rank + " double DEFAULT NULL,"+
+                average_speed+" varchar(45) DEFAULT NULL,"+
+                distance_run+" double NOT NULL,"+
+                PRIMARY_KEY + "(" +marathon_idmarathon + "," + participant_idparticipant +"),"+
+                "KEY `fk_marathon_has_participant_participant1_idx` ("+participant_idparticipant+"),"+
+                "KEY `fk_marathon_has_participant_marathon1_idx` ("+marathon_idmarathon+")"+
+                ")";
+
+        String createParticipantTable="CREATE TABLE IF NOT EXISTS" +
+                TABLE_PARTICIPANT + "(" +
+                idparticipant + " varchar(255) NOT NULL," +
+                courriel + " varchar(255) NOT NULL," +
+                photo + " longtext,"+
+                position_idposition + " varchar(255) NOT NULL,"+
+                password+" varchar(255) NOT NULL,"+
+                PRIMARY_KEY+ " ("+ idparticipant+")" +
+                "UNIQUE KEY `icourriel_UNIQUE` ("+ idmarathon+ ")" +
+                "KEY `fk_participant_position_idx` ("+position_idposition+")"+
+                ")";
+        String createPositionTable = "CREATE TABLE IF NOT EXISTS" +
+                TABLE_POSITION + "(" +
+                idposition + " varchar(255) NOT NULL," +
+                latitude + " double NOT NULL," +
+                longitude + " double NOT NULL,"+
+                radius + " double NOT NULL,"+
+                position_time+" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"+
+                temperature + " double DEFAULT NULL,"+
+                humidity + " double DEFAULT NULL,"+
+                speed+" double DEFAULT NULL,"+
+                date_position + " date NOT NULL,"+
+                PRIMARY_KEY+ " ("+ idposition+")" +
+                ")";
+
+
+        db.execSQL(createMarathonTable);
+        db.execSQL(createMarathonHasParticipantTable);
+        db.execSQL(createParticipantTable);
+        db.execSQL(createPositionTable);
     }
 
     @Override
