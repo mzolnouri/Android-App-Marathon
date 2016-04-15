@@ -24,4 +24,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="google_app_id">AIzaSyAMzeuemN7EqZLWFQa3wo7USteDfr0_g0o</string>
+    <string name="celsius">&#176;C</string>
 </resources>

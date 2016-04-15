@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,7 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener , SensorEventListener{
 
     private GoogleApiClient fGoogleApiClient;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -63,6 +68,11 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
     private GeocodingLocation fLocationAddress;
     private ArrayList<LatLng> fPoints;
     private Route fRoute;
+
+    /* Temperature sensor*/
+    private SensorManager mSensorManager;
+    private Sensor mTemperature;
+    private final static String NOT_SUPPORTED_MESSAGE = "Sorry, sensor not available for this device.";
 
     /* Pop up */
     ContentResolver fResolver;
@@ -91,11 +101,18 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
         f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Value_DM);
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DM);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DM);
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+            mTemperature= mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);	// requires API level 14.
+        }
+        if (mTemperature == null) {
+            fTemp.setText(NOT_SUPPORTED_MESSAGE);
+        }
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DM);
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
-        fTemp.setText("Pas encore calculé!");
+//        fTemp.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
 
         fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DM);
@@ -144,6 +161,7 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
         super.onResume();
         //setUpMapIfNeeded();
         fGoogleApiClient.connect();
+        mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -153,6 +171,7 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
             LocationServices.FusedLocationApi.removeLocationUpdates(fGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
             fGoogleApiClient.disconnect();
         }
+        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -249,6 +268,17 @@ public class IDisplayMarathon extends FragmentActivity implements OnMapReadyCall
         // TODO Auto-generated method stub
     }
 
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float ambient_temperature = event.values[0];
+        fTemp.setText( String.valueOf(ambient_temperature) + getResources().getString(R.string.celsius));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do something here if sensor accuracy changes.
+    }
     public String makeURL (double sourcelat, double sourcelog, double destlat, double destlog ){
         StringBuilder urlString = new StringBuilder();
         urlString.append("http://maps.googleapis.com/maps/api/directions/json");
