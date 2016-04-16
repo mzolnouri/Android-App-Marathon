@@ -108,28 +108,11 @@ public class IDisplayCurrentMarathon extends Activity {
          /* get longitude and latitude of start point address */
         fLocationAddress = new GeocodingLocation();
         fLocationAddress.getAddressFromLocation(fStartPoint, getApplicationContext(), new GeocoderHandler());
-        /* Display start point flag */
-//        fStartPointLatitude = fLatitudeFromAddress;
-//        fStartPointLongitude = fLongitudeFromAddress;
-//        LatLng latLngSP = new LatLng(fStartPointLatitude, fStartPointLongitude);
-//        MarkerOptions optionsSP = new MarkerOptions().position(latLngSP).title("Start point");
-//        fMap.addMarker(optionsSP);
-//        float zoomLevelSP = 16; //This goes up to 21
-//        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngSP, zoomLevelSP));
 
         /* get longitude and latitude of end point address */
         fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
-        /* Display start point flag */
-//        fEndPointLatitude = fLatitudeFromAddress;
-//        fEndPointLongitude = fLongitudeFromAddress;
-//        LatLng latLngEP = new LatLng(fEndPointLatitude, fEndPointLongitude);
-//        MarkerOptions optionsEP = new MarkerOptions().position(latLngEP).title("End point");
-//        fMap.addMarker(optionsEP);
-//        float zoomLevelEP = 16; //This goes up to 21
-//        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngEP, zoomLevelEP));
 
-
-
+        /* Create start and end point of marathon path */
         LatLng srcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
         LatLng destLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
 
@@ -193,7 +176,6 @@ public class IDisplayCurrentMarathon extends Activity {
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
@@ -214,7 +196,6 @@ public class IDisplayCurrentMarathon extends Activity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
             progressDialog = new ProgressDialog(IDisplayCurrentMarathon.this);
             progressDialog.setMessage("Fetching route, Please wait...");
@@ -223,13 +204,11 @@ public class IDisplayCurrentMarathon extends Activity {
         }
         @Override
         protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
             fetchData();
             return null;
         }
         @Override
         protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
             super.onPostExecute(result);
             if(doc!=null){
                 NodeList _nodelist = doc.getElementsByTagName("status");
@@ -303,7 +282,6 @@ public class IDisplayCurrentMarathon extends Activity {
             e.printStackTrace();
         }
         catch (SAXException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -317,7 +295,6 @@ public class IDisplayCurrentMarathon extends Activity {
         alert.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
 
             }
         });

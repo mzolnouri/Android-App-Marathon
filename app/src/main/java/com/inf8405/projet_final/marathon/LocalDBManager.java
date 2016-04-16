@@ -207,22 +207,22 @@ public class LocalDBManager extends SQLiteOpenHelper{
 
     public boolean supprimerElement(Participant participant)
     {   // todo colonne a choisir
-        String query="Select * FROM " + TABLE_RUNNNERS + " WHERE " + COLUMN1 + " = \"" + participant.getId()+ "\"";
+//        String query="Select * FROM " + TABLE_RUNNNERS + " WHERE " + COLUMN1 + " = \"" + participant.getId()+ "\"";
         boolean result=false;
-        SQLiteDatabase db=this.getWritableDatabase();
-        Cursor cursor=db.rawQuery(query, null);
-
-        if(cursor.moveToFirst())
-        {
-            String idElement=cursor.getString(0);
-            db.delete(TABLE_RUNNNERS, COLUMN1 + " = ?", new String[]{idElement});
-            // le supprimer de la liste actuelle
-            listParticipant.remove(participant);
-            listAllElement.remove(participant);
-            cursor.close();
-            result=true;
-        }
-        db.close();
+//        SQLiteDatabase db=this.getWritableDatabase();
+//        Cursor cursor=db.rawQuery(query, null);
+//
+//        if(cursor.moveToFirst())
+//        {
+//            String idElement=cursor.getString(0);
+//            db.delete(TABLE_RUNNNERS, COLUMN1 + " = ?", new String[]{idElement});
+//            // le supprimer de la liste actuelle
+//            listParticipant.remove(participant);
+//            listAllElement.remove(participant);
+//            cursor.close();
+//            result=true;
+//        }
+//        db.close();
         return result;
     }
 
@@ -234,20 +234,20 @@ public class LocalDBManager extends SQLiteOpenHelper{
             return listParticipant;
 
         // partie appeler a l'initialisation
-        String query="Select * FROM " + TABLE_RUNNNERS;
-        SQLiteDatabase db=this.getWritableDatabase();
-        Cursor cursor=db.rawQuery(query,null);
-
-        if(cursor.moveToFirst())
-        {
-            while (!cursor.isAfterLast())
-            {
-                Participant participant= new Participant();
-                participant.setId(cursor.getString(0));
-                listParticipant.add(participant);
-                listAllElement.add(participant);
-            }
-        }
+//        String query="Select * FROM " + TABLE_RUNNNERS;
+//        SQLiteDatabase db=this.getWritableDatabase();
+//        Cursor cursor=db.rawQuery(query,null);
+//
+//        if(cursor.moveToFirst())
+//        {
+//            while (!cursor.isAfterLast())
+//            {
+//                Participant participant= new Participant();
+//                participant.setId(cursor.getString(0));
+//                listParticipant.add(participant);
+//                listAllElement.add(participant);
+//            }
+//        }
         return listParticipant;
     }
 }

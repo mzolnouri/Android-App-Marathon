@@ -36,6 +36,7 @@ public class FNavHome extends Fragment {
     private RadioGroup mRadioGroup = null;
     private RadioButton radioButtonItem;
     private int mIdGroupe;
+    private boolean isHistoricMarathonListSelected = true;
 
     Activity mActivity;
 
@@ -86,10 +87,12 @@ public class FNavHome extends Fragment {
                 switch (checkedId) {
                     case R.id.rdBtnLMH:
                         //fMarathons = DBContent.getInstance().getListHistoricMarathon();
+                        isHistoricMarathonListSelected = true;
 
                         break;
                     case R.id.rdBtnLMA:
                         //fMarathons = DBContent.getInstance().getListActualMarathon();
+                        isHistoricMarathonListSelected = false;
                         break;
                 }
             }
@@ -170,11 +173,22 @@ public class FNavHome extends Fragment {
         fMarathonAdapter.notifyDataSetChanged();
     }
     public void ShowMarathonPath (View view, int index) {
-        Intent i = new Intent(getActivity(), IDisplayHistoricMarathon.class);
-        Bundle marathonName = new Bundle();
-        marathonName.putString("marathonName", fMarathons.get(index));
-        i.putExtras(marathonName);
-        startActivity(i);
+
+        /* Display historic ou actual marathon in view list */
+        if(isHistoricMarathonListSelected) {
+            Intent i = new Intent(getActivity(), IDisplayHistoricMarathon.class);
+            Bundle marathonName = new Bundle();
+            marathonName.putString("marathonName", fMarathons.get(index));
+            i.putExtras(marathonName);
+            startActivity(i);
+        }else{
+            Intent i = new Intent(getActivity(), IDisplayCurrentMarathon.class);
+            Bundle marathonName = new Bundle();
+            marathonName.putString("marathonName", fMarathons.get(index));
+            i.putExtras(marathonName);
+            startActivity(i);
+
+        }
 
     }
 

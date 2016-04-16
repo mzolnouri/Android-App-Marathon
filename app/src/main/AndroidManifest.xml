@@ -72,7 +72,10 @@
             android:label="@string/title_activity_edit_profile" />
         <activity
             android:name=".IDisplayHistoricMarathon"
-            android:label="@string/title_activity_display_marathon" />
+            android:label="@string/title_activity_display_historic_marathon" />
+        <activity
+            android:name=".IDisplayCurrentMarathon"
+            android:label="@string/title_activity_display_current_marathon" />
         <activity
             android:name=".MFindLocation"
             android:label="@string/title_activity_find_location" />
