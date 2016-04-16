@@ -1,7 +1,6 @@
 package com.inf8405.projet_final.marathon;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
 
 public class FNavHome extends Fragment {
     private View homeView;
@@ -33,6 +33,9 @@ public class FNavHome extends Fragment {
     private SearchView fSearchView;
     private ArrayAdapter<String> fMarathonAdapter;
     private ArrayList<String> fArrayList;
+    private RadioGroup mRadioGroup = null;
+    private RadioButton radioButtonItem;
+    private int mIdGroupe;
 
     Activity mActivity;
 
@@ -42,6 +45,7 @@ public class FNavHome extends Fragment {
 
         homeView = inflater.inflate(R.layout.activity_nav_home, container, false);
 
+        //fMarathons = DBContent.getInstance().getListHistoricMarathon();
         /* <Just for test> */
         Marathon m1 = new Marathon();
         m1.setNom("Boston Maraton");
@@ -68,6 +72,28 @@ public class FNavHome extends Fragment {
 
         this.fArrayList = new ArrayList<String>();
         fArrayList.addAll(fMarathons);
+
+        /* Manage radio group */
+        mRadioGroup = (RadioGroup) homeView.findViewById(R.id.rdGrp_ListMarthon);
+
+        mRadioGroup.check(R.id.rdBtnLMH);
+        mIdGroupe = mRadioGroup.getCheckedRadioButtonId();
+
+
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rdBtnLMH:
+                        //fMarathons = DBContent.getInstance().getListHistoricMarathon();
+
+                        break;
+                    case R.id.rdBtnLMA:
+                        //fMarathons = DBContent.getInstance().getListActualMarathon();
+                        break;
+                }
+            }
+        });
 
         /* </Just for test> */
 
@@ -144,7 +170,7 @@ public class FNavHome extends Fragment {
         fMarathonAdapter.notifyDataSetChanged();
     }
     public void ShowMarathonPath (View view, int index) {
-        Intent i = new Intent(getActivity(), IDisplayMarathon.class);
+        Intent i = new Intent(getActivity(), IDisplayHistoricMarathon.class);
         Bundle marathonName = new Bundle();
         marathonName.putString("marathonName", fMarathons.get(index));
         i.putExtras(marathonName);

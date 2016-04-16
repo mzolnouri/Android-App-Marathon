@@ -4,36 +4,15 @@ package com.inf8405.projet_final.marathon;
 // INF8405 - Laboratoire 2
 //Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-
-import android.app.FragmentManager;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
@@ -54,8 +33,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-public class IDisplayMarathon extends Activity {
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+
+public class IDisplayCurrentMarathon extends Activity {
     final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
     double fStartPointLatitude = 45.5024062;
@@ -79,7 +75,7 @@ public class IDisplayMarathon extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_marathon);
+        setContentView(R.layout.activity_display_historic_marathon);
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
 
@@ -186,7 +182,7 @@ public class IDisplayMarathon extends Activity {
             case R.id.menu_legalnotices:
                 String LicenseInfo = GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(
                         getApplicationContext());
-                AlertDialog.Builder LicenseDialog = new AlertDialog.Builder(IDisplayMarathon.this);
+                AlertDialog.Builder LicenseDialog = new AlertDialog.Builder(IDisplayCurrentMarathon.this);
                 LicenseDialog.setTitle("Legal Notices");
                 LicenseDialog.setMessage(LicenseInfo);
                 LicenseDialog.show();
@@ -220,7 +216,7 @@ public class IDisplayMarathon extends Activity {
         protected void onPreExecute() {
             // TODO Auto-generated method stub
             super.onPreExecute();
-            progressDialog = new ProgressDialog(IDisplayMarathon.this);
+            progressDialog = new ProgressDialog(IDisplayCurrentMarathon.this);
             progressDialog.setMessage("Fetching route, Please wait...");
             progressDialog.setIndeterminate(true);
             progressDialog.show();
@@ -314,7 +310,7 @@ public class IDisplayMarathon extends Activity {
 
 
     private void showAlert(String message){
-        AlertDialog.Builder alert = new AlertDialog.Builder(IDisplayMarathon.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(IDisplayCurrentMarathon.this);
         alert.setTitle("Error");
         alert.setCancelable(false);
         alert.setMessage(message);
