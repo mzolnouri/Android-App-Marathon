@@ -1,7 +1,10 @@
 package com.inf8405.projet_final.marathon;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 /**
@@ -16,9 +19,9 @@ public class Participant {
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
     private Position position_=new Position();
     private double distanceParcourue_=0.0;
-    private double vitesse_=0.0;
-    private double vitesseMoyenne_=0.0;
     private int classement_=0;
+    private Bitmap photoEnBitMap_;
+    private String photoEn64_ = new String();
 
     public Participant()
     {
@@ -46,22 +49,6 @@ public class Participant {
 
     public void setDistanceParcourue(double distanceParcourue) {
         this.distanceParcourue_ = distanceParcourue;
-    }
-
-    public double getVitesse() {
-        return vitesse_;
-    }
-
-    public void setVitesse(double vitesse) {
-        this.vitesse_ = vitesse;
-    }
-
-    public double getVitesseMoyenne() {
-        return vitesseMoyenne_;
-    }
-
-    public void setVitesseMoyenne(double vitesseMoyenne) {
-        this.vitesseMoyenne_ = vitesseMoyenne;
     }
 
     public String getNom() {
@@ -97,11 +84,22 @@ public class Participant {
     }
 
     public Bitmap getPhotoEnBitmap(){
-        // To Do
-        return null;
+        return photoEnBitMap_;
     }
 
-    public void setPhotoEnBitmap(Bitmap bitmap){
-        // To Do
+    public void setPhotoEnBitmap(Bitmap photo){
+        this.photoEnBitMap_ = photo;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        photoEn64_= Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+    public void setPhotoEn64(String photoEn64) {
+        byte[] decodedString = Base64.decode(photoEn64, Base64.DEFAULT);
+        photoEnBitMap_ = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        this.photoEn64_ = photoEn64;
+    }
+    public String getPhotoEn64() {
+        return photoEn64_;
     }
 }

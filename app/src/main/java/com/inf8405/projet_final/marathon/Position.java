@@ -17,7 +17,13 @@ public class Position {
     private double latitude_=0.0;
     private double radius_=0.0;
     private String adresse_=new String();
+    private Double temperature=new Double(0.0);
+    private Double humidity = new Double(0.0);
+    private Double speed = new Double(0.0);
     private Date date_;
+    private String time=new String();
+    private String day=new String();
+
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
 
     public Position()
@@ -94,4 +100,41 @@ public class Position {
     public void setAdresse(String adresse) {
         this.adresse_ = adresse;
     }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
+
+    public Double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(Double humidity) {
+        this.humidity = humidity;
+    }
+
+    public Double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Double speed) {
+        this.speed = speed;
+    }
+
+    public String getTime() {
+        DateFormat ttime=new SimpleDateFormat("hh:mm:ss");
+        time=ttime.format(date_);
+        return time;
+    }
+
+    public String getDay() {
+        DateFormat dday=new SimpleDateFormat("yyyy-M-dd");
+        day=dday.format(date_);
+        return day;
+    }
+
 }
