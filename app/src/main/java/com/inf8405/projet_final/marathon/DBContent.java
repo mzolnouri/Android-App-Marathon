@@ -1,5 +1,6 @@
 package com.inf8405.projet_final.marathon;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -35,6 +36,16 @@ public class DBContent {
 
     public Map<String,Marathon> GetMarathonMap(String participantId){
         // To Do
+        return null;
+    }
+
+    public ArrayList<String> getListHistoricMarathon(){
+        // To do
+        return null;
+    }
+
+    public ArrayList<String> getListActualMarathon(){
+        // To do
         return null;
     }
 

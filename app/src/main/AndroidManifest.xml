@@ -71,7 +71,7 @@
             android:name=".IEditProfile"
             android:label="@string/title_activity_edit_profile" />
         <activity
-            android:name=".IDisplayMarathon"
+            android:name=".IDisplayHistoricMarathon"
             android:label="@string/title_activity_display_marathon" />
         <activity
             android:name=".MFindLocation"
