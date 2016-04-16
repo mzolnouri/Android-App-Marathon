@@ -3,6 +3,7 @@ package com.inf8405.projet_final.marathon;
 /**
  * Created by youssef on 04/04/2016.
  */
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,29 +13,32 @@ import java.text.DateFormat;
 import java.util.UUID;
 
 public class Position {
-    private String id_=new String();
-    private double longitude_=0.0;
-    private double latitude_=0.0;
-    private double radius_=0.0;
-    private String adresse_=new String();
-    private Double temperature=new Double(0.0);
+    private String id_ = new String();
+    private double longitude_ = 0.0;
+    private double latitude_ = 0.0;
+    private double radius_ = 0.0;
+    private String adresse_ = new String();
+    private Double temperature = new Double(0.0);
     private Double humidity = new Double(0.0);
     private Double speed = new Double(0.0);
     private Date date_;
-    private String time=new String();
-    private String day=new String();
+
+
+    private String time = new String();
+
+    private String day = new String();
 
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
 
-    public Position()
-    {
-        id_=uidFormat_.randomUUID().toString();
-        date_= Calendar.getInstance().getTime();
+    public Position() {
+        id_ = uidFormat_.randomUUID().toString();
+        date_ = Calendar.getInstance().getTime();
     }
+
     public Position(double latitude, double longitude) {
-        longitude_=longitude;
-        latitude_=latitude;
-        date_= Calendar.getInstance().getTime();
+        longitude_ = longitude;
+        latitude_ = latitude;
+        date_ = Calendar.getInstance().getTime();
     }
 
     public String getId() {
@@ -61,28 +65,26 @@ public class Position {
         this.latitude_ = latitude;
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return date_;
     }
 
-    public void setActualDateAndTime()
-    {
-        date_= Calendar.getInstance().getTime();
+    public void setActualDateAndTime() {
+        date_ = Calendar.getInstance().getTime();
     }
-    public void setDate(String date)
-    {
+
+    public void setDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
         try {
-            date_=sdf.parse(date);
+            date_ = sdf.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
-    public String getDateString()
-    {
+
+    public String getDateString() {
         DateFormat df = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
-        return  df.format(date_);
+        return df.format(date_);
     }
 
     public double getRadius() {
@@ -126,15 +128,22 @@ public class Position {
     }
 
     public String getTime() {
-        DateFormat ttime=new SimpleDateFormat("hh:mm:ss");
-        time=ttime.format(date_);
+        DateFormat ttime = new SimpleDateFormat("hh:mm:ss");
+        time = ttime.format(date_);
         return time;
     }
 
     public String getDay() {
-        DateFormat dday=new SimpleDateFormat("yyyy-M-dd");
-        day=dday.format(date_);
+        DateFormat dday = new SimpleDateFormat("yyyy-M-dd");
+        day = dday.format(date_);
         return day;
     }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
 }
