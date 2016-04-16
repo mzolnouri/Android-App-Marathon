@@ -60,6 +60,13 @@ public class IDisplayCurrentMarathon extends Activity {
     double fEndPointLongitude = -73.6262171;
     private String fMarathonName;
     private TextView f1stNom = null;
+    private TextView f1stSpeed = null;
+    private TextView f2ndNom = null;
+    private TextView f2ndSpeed = null;
+    private TextView f3rdNom = null;
+    private TextView f3rdSpeed = null;
+    private TextView fMeNom = null;
+    private TextView fMeSpeed = null;
     private TextView fDistance = null;
     private TextView fTemp = null;
     private TextView fHumidity = null;
@@ -83,10 +90,26 @@ public class IDisplayCurrentMarathon extends Activity {
         MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DMA);
         fMap = myMapFragment.getMap();
 
-        f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Value_DMA);
+        f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Nom_Value_DMA);
+        f1stSpeed = (TextView) findViewById(R.id.TV_1stNTS_Speed_Value_DMA);
+        f2ndNom = (TextView) findViewById(R.id.TV_2ndNTS_Nom_Value_DMA);
+        f2ndSpeed = (TextView) findViewById(R.id.TV_2ndNTS_Speed_Value_DMA);
+        f3rdNom = (TextView) findViewById(R.id.TV_3rdNTS_Nom_Value_DMA);
+        f3rdSpeed = (TextView) findViewById(R.id.TV_3rdNTS_Speed_Value_DMA);
+        fMeNom = (TextView) findViewById(R.id.TV_MeNTS_Nom_Value_DMA);
+        fMeSpeed = (TextView) findViewById(R.id.TV_MeNTS_Speed_Value_DMA);
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DMA);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
+
+        f1stNom.setText("name1");
+        f1stSpeed.setText("speed1");
+        f2ndNom.setText("name2");
+        f2ndSpeed.setText("speed2");
+        f3rdNom.setText("name3");
+        f3rdSpeed.setText("speed3");
+        fMeNom.setText("my name");
+        fMeSpeed.setText("my speed");
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");

@@ -7,107 +7,225 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="4"
+        android:layout_weight="4.7"
         tools:context=".IDisplayHistoricMarathon">
+        
+        <!-- " Participant information layout" -->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/RL_ListParticipants_DMA"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            tools:context=".IDisplayHistoricMarathon">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/LL_1stNTS_DMA">
-
-            <TextView
-                android:id="@+id/TV_1stNTS_DMA"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/LL_1stNTS_DMA"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="1st : " />
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/TV_1stNTS_Value_DMA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_toRightOf="@+id/TV_1stNTS_DMA"
-                android:text=" ... " />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/TV_1stNTS_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="1st : "
+                   />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/LL_Dis_DMA"
-            android:layout_below="@+id/LL_1stNTS_DMA">
-            <TextView
-                android:id="@+id/TV_Dis_DMA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:text="Distance : " />
+                <TextView
+                    android:id="@+id/TV_1stNTS_Nom_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_1stNTS_DMA"
+                    android:text=" name " />
 
-            <TextView
-                android:id="@+id/TV_Dis_Value_DMA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/TV_Dis_DMA"
-                android:text=" ... " />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/TV_1stNTS_Speed_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_1stNTS_Nom_Value_DMA"
+                    android:text=" speed " />
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/LL_Temp_DMA"
-            android:layout_below="@+id/LL_Dis_DMA">
-            <TextView
-                android:id="@+id/TV_Temp_DMA"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/LL_2ndNTS_DMA"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:text="Temperture : " />
+                android:layout_below="@+id/LL_1stNTS_DMA"
+                android:layout_marginTop="5dp">
 
-            <TextView
-                android:id="@+id/TV_Temp_Value_DMA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/TV_Temp_DMA"
-                android:text=" ... " />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/LL_Humidity_DMA"
-            android:layout_below="@+id/LL_Temp_DMA">
+                <TextView
+                    android:id="@+id/TV_2ndNTS_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="2nd : " />
 
-            <TextView
-                android:id="@+id/TV_Hum_DMA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:text="Humidity : " />
+                <TextView
+                    android:id="@+id/TV_2ndNTS_Nom_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_2ndNTS_DMA"
+                    android:text=" name " />
 
-            <TextView
-                android:id="@+id/TV_Hum_Value_DMA"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/TV_2ndNTS_Speed_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_2ndNTS_Nom_Value_DMA"
+                    android:text=" speed " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LL_3rdNTS_DMA"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/TV_Hum_DMA"
-                android:text=" ... " />
-        </LinearLayout>
+                android:layout_below="@+id/LL_2ndNTS_DMA"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/TV_3rdNTS_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="3rd : " />
+
+                <TextView
+                    android:id="@+id/TV_3rdNTS_Nom_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_3rdNTS_DMA"
+                    android:text=" name " />
+
+                <TextView
+                    android:id="@+id/TV_3rdNTS_Speed_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_3rdNTS_Nom_Value_DMA"
+                    android:text=" speed " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LL_MeNTS_DMA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LL_3rdNTS_DMA"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/TV_MeNTS_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Me : " />
+
+                <TextView
+                    android:id="@+id/TV_MeNTS_Nom_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_MeNTS_DMA"
+                    android:text=" name " />
+
+                <TextView
+                    android:id="@+id/TV_MeNTS_Speed_Value_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/TV_MeNTS_Nom_Value_DMA"
+                    android:text=" speed " />
+            </LinearLayout>
+        </RelativeLayout>
+        <!-- " General information layout" -->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/RL_INFO_DMA"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            tools:context=".IDisplayHistoricMarathon"
+            android:layout_toRightOf="@+id/RL_ListParticipants_DMA"
+            android:layout_marginLeft="10dp">
+
+            <LinearLayout
+                android:id="@+id/LL_Dis_DMA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/TV_Dis_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="Distance : " />
+
+                <TextView
+                    android:id="@+id/TV_Dis_Value_DMA"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/TV_Dis_DMA"
+                    android:text=" ... " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LL_Temp_DMA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LL_Dis_DMA"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/TV_Temp_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="Temperture : " />
+
+                <TextView
+                    android:id="@+id/TV_Temp_Value_DMA"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/TV_Temp_DMA"
+                    android:text=" ... " />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LL_Humidity_DMA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LL_Temp_DMA"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/TV_Hum_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="Humidity : " />
+
+                <TextView
+                    android:id="@+id/TV_Hum_Value_DMA"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/TV_Hum_DMA"
+                    android:text=" ... " />
+            </LinearLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2.1">
+        android:layout_weight="1.7">
 
         <FrameLayout
             android:id="@+id/FL_Map_DMA"
@@ -143,7 +261,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="5">
+        android:layout_weight="5.5">
 
         <Button
             android:id="@+id/BTN_Return_DMA"
