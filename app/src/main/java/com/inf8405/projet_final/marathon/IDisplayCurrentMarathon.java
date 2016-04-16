@@ -75,25 +75,25 @@ public class IDisplayCurrentMarathon extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_historic_marathon);
+        setContentView(R.layout.activity_display_current_marathon);
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
 
         FragmentManager myFragmentManager = getFragmentManager();
-        MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DM);
+        MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DMA);
         fMap = myMapFragment.getMap();
 
-        f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Value_DM);
-        fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DM);
-        fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DM);
-        fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DM);
+        f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Value_DMA);
+        fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DMA);
+        fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
+        fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
         fTemp.setText("Pas encore calculé!");
         fHumidity.setText("Pas encore calculé!");
 
-        fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DM);
+        fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DMA);
 
         fBtnRevenirMM.setOnClickListener(new View.OnClickListener() {
             @Override

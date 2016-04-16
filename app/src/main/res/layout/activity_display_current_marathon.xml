@@ -1,0 +1,157 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        tools:context=".IDisplayHistoricMarathon">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_1stNTS_DMA">
+
+            <TextView
+                android:id="@+id/TV_1stNTS_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="1st : " />
+
+            <TextView
+                android:id="@+id/TV_1stNTS_Value_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/TV_1stNTS_DMA"
+                android:text=" ... " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Dis_DMA"
+            android:layout_below="@+id/LL_1stNTS_DMA">
+            <TextView
+                android:id="@+id/TV_Dis_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Distance : " />
+
+            <TextView
+                android:id="@+id/TV_Dis_Value_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/TV_Dis_DMA"
+                android:text=" ... " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Temp_DMA"
+            android:layout_below="@+id/LL_Dis_DMA">
+            <TextView
+                android:id="@+id/TV_Temp_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Temperture : " />
+
+            <TextView
+                android:id="@+id/TV_Temp_Value_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/TV_Temp_DMA"
+                android:text=" ... " />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL_Humidity_DMA"
+            android:layout_below="@+id/LL_Temp_DMA">
+
+            <TextView
+                android:id="@+id/TV_Hum_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Humidity : " />
+
+            <TextView
+                android:id="@+id/TV_Hum_Value_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/TV_Hum_DMA"
+                android:text=" ... " />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="2.1">
+
+        <FrameLayout
+            android:id="@+id/FL_Map_DMA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5b74a8">
+
+            <TextView
+                android:id="@+id/TV_TileToolBarMap_DMA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Display marathon path on Google Maps"
+                android:textColor="#000"
+                android:textSize="16dp"></TextView>
+        </FrameLayout>
+
+        <fragment
+            android:id="@+id/MAP_DMA"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/FL_Map_DMA"></fragment>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/MAP_DMA"
+            android:text=""></TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="5">
+
+        <Button
+            android:id="@+id/BTN_Return_DMA"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:text="Retrun to main menu" />
+
+
+    </RelativeLayout>
+</LinearLayout>
