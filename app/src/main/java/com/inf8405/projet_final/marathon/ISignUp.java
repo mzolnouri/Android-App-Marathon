@@ -75,7 +75,7 @@ public class ISignUp extends AppCompatActivity {
         fBtnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ISignUp.this, "Longitude : " + fCurrentLongitude + "Latitude : " + fCurrentLatitude, Toast.LENGTH_LONG).show();
+                //Toast.makeText(ISignUp.this, "Longitude : " + fCurrentLongitude + "Latitude : " + fCurrentLatitude, Toast.LENGTH_LONG).show();
                 attemptLogin();
             }
         });
@@ -257,9 +257,9 @@ public class ISignUp extends AppCompatActivity {
             }
 
             if (fUserInsertSuccessful) {
-                Toast.makeText(getApplicationContext(),
-                        "Sign up successful!",
-                        Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Sign up successful!",
+//                        Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getBaseContext(), IMainMenu.class);
                 startActivity(i);
                 finish();

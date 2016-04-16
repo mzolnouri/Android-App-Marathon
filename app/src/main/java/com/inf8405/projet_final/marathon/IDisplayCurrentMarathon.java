@@ -204,9 +204,9 @@ public class IDisplayCurrentMarathon extends Activity {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
         if (resultCode == ConnectionResult.SUCCESS){
-            Toast.makeText(getApplicationContext(),
-                    "isGooglePlayServicesAvailable SUCCESS",
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),
+//                    "isGooglePlayServicesAvailable SUCCESS",
+//                    Toast.LENGTH_LONG).show();
         }else{
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
@@ -274,7 +274,7 @@ public class IDisplayCurrentMarathon extends Activity {
     private void fetchData()
     {
         StringBuilder urlString = new StringBuilder();
-        urlString.append("http://maps.google.com/maps/api/directions/xml?origin=");
+        urlString.append("http://maps.googleapis.com/maps/api/directions/xml?origin=");
         urlString.append(fStartPointLatitude);
         urlString.append(",");
         urlString.append(fStartPointLongitude);
@@ -282,7 +282,7 @@ public class IDisplayCurrentMarathon extends Activity {
         urlString.append(fEndPointLatitude);
         urlString.append(",");
         urlString.append(fEndPointLongitude);
-        urlString.append("&sensor=true&mode=driving");
+        urlString.append("&sensor=true&mode=walking");
         Log.d("url","::"+urlString.toString());
         HttpURLConnection urlConnection= null;
         URL url = null;

@@ -273,7 +273,7 @@ public class IDisplayHistoricMarathon extends Activity {
     private void fetchData()
     {
         StringBuilder urlString = new StringBuilder();
-        urlString.append("http://maps.google.com/maps/api/directions/xml?origin=");
+        urlString.append("http://maps.googleapis.com/maps/api/directions/xml?origin=");
         urlString.append(fStartPointLatitude);
         urlString.append(",");
         urlString.append(fStartPointLongitude);
@@ -281,7 +281,7 @@ public class IDisplayHistoricMarathon extends Activity {
         urlString.append(fEndPointLatitude);
         urlString.append(",");
         urlString.append(fEndPointLongitude);
-        urlString.append("&sensor=true&mode=driving");
+        urlString.append("&sensor=true&mode=walking");
         Log.d("url","::"+urlString.toString());
         HttpURLConnection urlConnection= null;
         URL url = null;
