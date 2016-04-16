@@ -20,8 +20,28 @@ public class Participant {
     private Position position_=new Position();
     private double distanceParcourue_=0.0;
     private int classement_=0;
+
+    public double getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(double averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    private double averageSpeed =0;
     private Bitmap photoEnBitMap_;
     private String photoEn64_ = new String();
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    private int rank =99;
 
     public Participant()
     {
@@ -38,11 +58,17 @@ public class Participant {
     public Position getPosition() {
         return position_;
     }
+    public String getIdPosition() {
+        return position_.getId();
+    }
 
     public void setPosition(Position position) {
         this.position_ = position;
     }
 
+    public void setIdPosition(String idPosition) {
+        this.position_.setId(idPosition);
+    }
     public double getDistanceParcourue() {
         return distanceParcourue_;
     }
