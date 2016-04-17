@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -74,10 +73,13 @@ public class IDisplayCurrentMarathon extends Activity {
     private double fLatitudeFromAddress;
     private double fLongitudeFromAddress;
     private String fStartPoint = "2500, chemin de Polytechnique, Montreal, Canada";
-    private String fEndPoint = "5700 Chemin Cote-Des-Neiges, Montreal, Canada";
+    private String fBM = "5700 Chemin Cote-Des-Neiges, Montreal, Canada";
+    private String fEndPoint = "13100 Boulevard Henri Fabre, Mirabel, Canada";
     private String latLongFromAdd = "";
-    MarkerOptions markerOptions;
+    private MarkerOptions markerOptions;
     private GeocodingLocation fLocationAddress;
+    private String distanceFromXML = "";
+    private boolean drawPathallowed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,9 +171,9 @@ public class IDisplayCurrentMarathon extends Activity {
 
 
         // Polyline line = fMap.addPolyline(new PolylineOptions().add(srcLatLng, destLatLng).width(5).color(Color.RED));
-
         connectAsyncTask _connectAsyncTask = new connectAsyncTask();
         _connectAsyncTask.execute();
+
 
     }
 
@@ -228,17 +230,41 @@ public class IDisplayCurrentMarathon extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             fetchData();
+            //getDuration();
             return null;
         }
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if(doc!=null){
-                NodeList _nodelist = doc.getElementsByTagName("status");
+            if(responseGetPath !=null){
+                NodeList _nodelist = responseGetPath.getElementsByTagName("status");
                 Node node1 = _nodelist.item(0);
                 String _status1 = node1.getChildNodes().item(0).getNodeValue();
                 if(_status1.equalsIgnoreCase("OK")){
-                    NodeList _nodelist_path = doc.getElementsByTagName("overview_polyline");
+                    NodeList nodeListLeg = responseGetPath.getElementsByTagName("leg");
+                    Node _nodeLeg = nodeListLeg.item(0);
+                    Element elementLeg = (Element) _nodeLeg;
+                    int index = 0;
+                    String dis = "";
+                    String strDis[];
+                    for(int i = 0; i < elementLeg.getChildNodes().getLength(); i++){
+                        Node child = elementLeg.getChildNodes().item(i);
+                        if(i%2!=0) {
+                            if (child.getNodeName().equals("distance")) {
+                                index = i;
+                                dis = child.getTextContent();
+                                strDis = dis.split("\n");
+                                for(int j = 0; j < strDis.length; j++){
+                                    if(strDis[j].contains("km")) {
+                                        distanceFromXML = strDis[j];
+                                        fDistance.setText(distanceFromXML);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    NodeList _nodelist_path = responseGetPath.getElementsByTagName("overview_polyline");
                     Node node_path = _nodelist_path.item(0);
                     Element _status_path = (Element)node_path;
                     NodeList _nodelist_destination_path = _status_path.getElementsByTagName("points");
@@ -263,14 +289,51 @@ public class IDisplayCurrentMarathon extends Activity {
             }else{
                 showAlert("Unable to find the route");
             }
-
             progressDialog.dismiss();
 
         }
 
     }
+    Document responseGetDistance = null;
+    private void getDuration(){
 
-    Document doc = null;
+        StringBuilder urlStr = new StringBuilder();
+        urlStr.append("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Montreal&destinations=Mirabel&mode=walking&language=fr-FR");
+//        urlStr.append(fStartPointLatitude);
+//        urlStr.append(",");
+//        urlStr.append(fStartPointLongitude);
+//        urlStr.append("&destination=");//to
+//        urlStr.append(fEndPointLatitude);
+//        urlStr.append(",");
+//        urlStr.append(fEndPointLongitude);
+//        urlStr.append("&mode=walking&language=fr-FR");
+//        Log.d("url","::"+urlStr.toString());
+        HttpURLConnection urlConnectionDis= null;
+        URL urlDis = null;
+        try
+        {
+            urlDis = new URL(urlStr.toString());
+            urlConnectionDis=(HttpURLConnection)urlDis.openConnection();
+            urlConnectionDis.setRequestMethod("GET");
+            urlConnectionDis.setDoOutput(true);
+            urlConnectionDis.setDoInput(true);
+            urlConnectionDis.connect();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            responseGetDistance = (Document) db.parse(urlConnectionDis.getInputStream());//Util.XMLfromString(response);
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ParserConfigurationException e){
+            e.printStackTrace();
+        }
+        catch (SAXException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Document responseGetPath = null;
     private void fetchData()
     {
         StringBuilder urlString = new StringBuilder();
@@ -296,7 +359,8 @@ public class IDisplayCurrentMarathon extends Activity {
             urlConnection.connect();
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            doc = (Document) db.parse(urlConnection.getInputStream());//Util.XMLfromString(response);
+            responseGetPath = (Document) db.parse(urlConnection.getInputStream());//Util.XMLfromString(response);
+            urlConnection.disconnect();
         }catch (MalformedURLException e){
             e.printStackTrace();
         }catch (IOException e){
@@ -374,10 +438,15 @@ public class IDisplayCurrentMarathon extends Activity {
                 fMap.addMarker(options);
                 float zoomLevel = 16; //This goes up to 21
                 fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
-                //fPoints.add(latLng);
-                //if(fPoints.size() > 1)
-                //    fRoute.drawRoute(fMap, getApplicationContext(), fPoints, "en", false);
-
+                if(drawPathallowed) {
+                    fStartPointLatitude = fLatitudeFromAddress;
+                    fStartPointLongitude = fLongitudeFromAddress;
+                }
+                else{
+                    fStartPointLatitude = fLatitudeFromAddress;
+                    fStartPointLongitude = fLongitudeFromAddress;
+                    drawPathallowed = true;
+                }
             }else{
                 LatLng latLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
                 MarkerOptions options = new MarkerOptions().position(latLng).title("Actual location");
