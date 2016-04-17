@@ -88,6 +88,10 @@ public class Parseur {
             marathon.setDistance(json.getJSONObject(i).getDouble("distance"));
             marathon.setPositionDepart(json.getJSONObject(i).getString("position_depart"));
             marathon.setPositionArrivee(json.getJSONObject(i).getString("position_arrivee"));
+            marathon.setPositionArriveeLatitude(json.getJSONObject(i).getDouble("position_arrivee_latitude"));
+            marathon.setPositionArriveeLongitude(json.getJSONObject(i).getDouble("position_arrivee_longitude"));
+            marathon.setPositionDepartLatitude(json.getJSONObject(i).getDouble("position_depart_latitude"));
+            marathon.setPositionDepartLongitude(json.getJSONObject(i).getDouble("position_depart_longitude"));
             marathon.setTemperature(json.getJSONObject(i).getDouble("temperature"));
             marathon.setHumidity(json.getJSONObject(i).getDouble("humidity"));
             marathon.setActual(json.getJSONObject(i).getBoolean("actual"));
@@ -219,6 +223,10 @@ public class Parseur {
             marathon.setDistance(json.getJSONObject(i).getDouble("distance"));
             marathon.setPositionDepart(json.getJSONObject(i).getString("position_depart"));
             marathon.setPositionArrivee(json.getJSONObject(i).getString("position_arrivee"));
+            marathon.setPositionArriveeLatitude(json.getJSONObject(i).getDouble("position_arrivee_latitude"));
+            marathon.setPositionArriveeLongitude(json.getJSONObject(i).getDouble("position_arrivee_longitude"));
+            marathon.setPositionDepartLatitude(json.getJSONObject(i).getDouble("position_depart_latitude"));
+            marathon.setPositionDepartLongitude(json.getJSONObject(i).getDouble("position_depart_longitude"));
             marathon.setTemperature(json.getJSONObject(i).getDouble("temperature"));
             marathon.setHumidity(json.getJSONObject(i).getDouble("humidity"));
             marathon.setActual(json.getJSONObject(i).getBoolean("actual"));
@@ -243,9 +251,14 @@ public class Parseur {
             marathon.setDistance(json.getJSONObject(i).getDouble("distance"));
             marathon.setPositionDepart(json.getJSONObject(i).getString("position_depart"));
             marathon.setPositionArrivee(json.getJSONObject(i).getString("position_arrivee"));
+            marathon.setPositionArriveeLatitude(json.getJSONObject(i).getDouble("position_arrivee_latitude"));
+            marathon.setPositionArriveeLongitude(json.getJSONObject(i).getDouble("position_arrivee_longitude"));
+            marathon.setPositionDepartLatitude(json.getJSONObject(i).getDouble("position_depart_latitude"));
+            marathon.setPositionDepartLongitude(json.getJSONObject(i).getDouble("position_depart_longitude"));
             marathon.setTemperature(json.getJSONObject(i).getDouble("temperature"));
             marathon.setHumidity(json.getJSONObject(i).getDouble("humidity"));
             marathon.setActual(json.getJSONObject(i).getBoolean("actual"));
+
             marathonMap.put(marathon.getId(), marathon);
         }
         return marathonMap;

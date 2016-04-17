@@ -17,6 +17,13 @@ public class Marathon {
     private String positionArrivee_=new String();
     private Double distance_=new Double(0.0);
     private int nbParticipant_=0;
+
+
+    private Double positionArriveeLatitude = 45.503297;
+    private Double positionArriveeLongitude = -73.6210089;
+    private Double positionDepartLatitude = 45.5061666;
+    private Double positionDepartLongitude = -73.5798302;
+
     private UUID uidFormat_ = UUID.fromString("91c83b36-e25c-11e5-9730-9a79f06e9478");
 
     public Date getDate_() {
@@ -121,4 +128,37 @@ public class Marathon {
     public void setNbParticipant(int nbParticipant) {
         this.nbParticipant_ = nbParticipant;
     }
+
+    public Double getPositionArriveeLatitude() {
+        return positionArriveeLatitude;
+    }
+
+    public void setPositionArriveeLatitude(Double positionArriveeLatitude) {
+        this.positionArriveeLatitude = positionArriveeLatitude;
+    }
+
+    public Double getPositionArriveeLongitude() {
+        return positionArriveeLongitude;
+    }
+
+    public void setPositionArriveeLongitude(Double positionArriveeLongitude) {
+        this.positionArriveeLongitude = positionArriveeLongitude;
+    }
+
+    public Double getPositionDepartLatitude() {
+        return positionDepartLatitude;
+    }
+
+    public void setPositionDepartLatitude(Double positionDepartLatitude) {
+        this.positionDepartLatitude = positionDepartLatitude;
+    }
+
+    public Double getPositionDepartLongitude() {
+        return positionDepartLongitude;
+    }
+
+    public void setPositionDepartLongitude(Double positionDepartLongitude) {
+        this.positionDepartLongitude = positionDepartLongitude;
+    }
+
 }
