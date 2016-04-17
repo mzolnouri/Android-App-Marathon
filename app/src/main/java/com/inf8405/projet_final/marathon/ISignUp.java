@@ -304,10 +304,13 @@ public class ISignUp extends AppCompatActivity {
             Participant newParticipan = new Participant();
             newParticipan.setCourriel(fEmail);
             newParticipan.setPassword(fPassword);
-            newParticipan.setPosition(new Position(fCurrentLatitude, fCurrentLongitude));
             if (fImageEnBitmap != null)
                 newParticipan.setPhotoEnBitmap(fImageEnBitmap);
-
+            Position pos = new Position(fCurrentLatitude, fCurrentLongitude);
+            pos.setTemperature(25.0);
+            pos.setHumidity(0.5);
+            pos.setSpeed(25.0);
+            newParticipan.setPosition(pos);
 
             //newParticipan.setfLastName(fLastName);
             //newParticipan.setfFirstName(fFirstName);

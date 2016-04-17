@@ -36,6 +36,7 @@ public class Position {
     }
 
     public Position(double latitude, double longitude) {
+        id_ = uidFormat_.randomUUID().toString();
         longitude_ = longitude;
         latitude_ = latitude;
         date_ = Calendar.getInstance().getTime();
