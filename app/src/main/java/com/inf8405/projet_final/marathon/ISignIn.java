@@ -77,8 +77,8 @@ public class ISignIn extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "Password is correct :)",
                             Toast.LENGTH_LONG).show();
-                    //Intent i = new Intent(getBaseContext(), IMainMenu.class);
-                    //startActivity(i);
+                    Intent i = new Intent(getBaseContext(), IMainMenu.class);
+                    startActivity(i);
                     finish();
                 } else if (fAuthentificationReponse.contentEquals(MConstants.WRONG_EMAIL)) {
                     Toast.makeText(getApplicationContext(),
@@ -121,10 +121,10 @@ public class ISignIn extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             // Créer un nouveau utilisateur pour valider sign in
-            //MUser user = new MUser();
-            //user.setEmail(fEmail);
-            //user.setPassword(fPassword);
-            //fAuthentificationReponse = MDataBaseContent.getInstance().authentification(user);
+            Participant participant = new Participant();
+            participant.setCourriel(fEmail);
+            participant.setPassword(fPassword);
+            fAuthentificationReponse = DBContent.getInstance().authentification(participant.getCourriel(), participant.getPassword());
             return null;
         }
     }

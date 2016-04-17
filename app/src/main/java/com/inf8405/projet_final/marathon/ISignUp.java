@@ -301,20 +301,21 @@ public class ISignUp extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             // Créer un nouveau utilisateur pour valider sign in
-//            MUser newUser = new MUser();
-//            newUser.setEmail(fEmail);
-//            newUser.setPassword(fPassword);
-//            newUser.setPosition(new MPosition(fCurrentLatitude, fCurrentLongitude));
-//            if (fImageEnBitmap != null)
-//                newUser.setPhotoEnBitmap(fImageEnBitmap);
-//
-//            newUser.setfLastName(fLastName);
-//            newUser.setfFirstName(fFirstName);
-//
-//            String response = MDataBaseContent.getInstance().CreateNewUser(newUser);
-//            if (response.contentEquals(MConstants.USER_ADDED)) {
+            Participant newParticipan = new Participant();
+            newParticipan.setCourriel(fEmail);
+            newParticipan.setPassword(fPassword);
+            newParticipan.setPosition(new Position(fCurrentLatitude, fCurrentLongitude));
+            if (fImageEnBitmap != null)
+                newParticipan.setPhotoEnBitmap(fImageEnBitmap);
+
+
+            //newParticipan.setfLastName(fLastName);
+            //newParticipan.setfFirstName(fFirstName);
+
+            String response = DBContent.getInstance().CreerNouvelUtilisateur(newParticipan);
+            if (response.contentEquals(MConstants.USER_ADDED)) {
                 fUserInsertSuccessful = true;
-//            }
+            }
 
             return null;
 
