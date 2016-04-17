@@ -101,7 +101,26 @@ public class DBContent {
     }
 
     public void updateParticipantInformationInRemoteContent(){
-        // To Do
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String temp = DBConnexion.postRequest("http://najibarbaoui.com/api/update_participant.php", Parseur.ParseParticipantWithoutPositionToJsonFormat(participantMap_.get(actualParticipantId_)));
+                    Log.d("okkkkkkaa", temp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -27,6 +27,16 @@ public class Parseur {
         return participantMap;
     }
 
+    public static String ParseParticipantWithoutPositionToJsonFormat(Participant user) throws JSONException {
+        JSONObject userJson = new JSONObject();
+        userJson.put("idparticipant",user.getId());
+        userJson.put("courriel",user.getCourriel());
+        userJson.put("photo",user.getPhotoEn64());
+        userJson.put("password",user.getPassword());
+
+        return userJson.toString();
+    }
+
     // Obtenir informations sur un participant
     public static Participant ParseJsonToParticipant(String userStr) throws JSONException {
         JSONArray temp = new JSONArray(userStr);
