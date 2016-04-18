@@ -100,12 +100,12 @@ public class DBContent {
 
     }
 
-    public void updateParticipantInformationInRemoteContentMah(){
+    public void updateParticipantInformationInRemoteContent(){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    String temp = DBConnexion.postRequest("http://najibarbaoui.com/api/update_utilisateur.php", Parseur.ParseParticipantWithoutPositionToJsonFormatMah(participantMap_.get(actualParticipantId_)));
+                    String temp = DBConnexion.postRequest("http://najibarbaoui.com/api/update_participant.php", Parseur.ParseParticipantWithoutPositionToJsonFormat(participantMap_.get(actualParticipantId_)));
                     Log.d("okkkkkkaa", temp);
                 } catch (JSONException e) {
                     e.printStackTrace();
