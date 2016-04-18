@@ -51,13 +51,13 @@ public class IMainMenu extends AppCompatActivity
 
         View header = navigationView.getHeaderView(0);
         TextView tv_email = (TextView)header.findViewById(R.id.txtVwHeaderProfileEmailH);
-//        if(tv_email != null && DBContent.getInstance().getActualUser().getEmail() != null )
-//            tv_email.setText(DBContent.getInstance().getActualUser().getEmail());
+        if(tv_email != null && DBContent.getInstance().getActualParticipant().getCourriel() != null )
+            tv_email.setText(DBContent.getInstance().getActualParticipant().getCourriel());
         mViewImage =(ImageView)header.findViewById(R.id.imageViewHeaderH);
-        //if(mViewImage != null && DBContent.getInstance().getActualUser().getPhotoEnBitmap() != null) {
-        //    actualUserImage = DBContent.getInstance().getActualUser().getPhotoEnBitmap();
+        if(mViewImage != null && DBContent.getInstance().getActualParticipant().getPhotoEnBitmap() != null) {
+            actualUserImage = DBContent.getInstance().getActualParticipant().getPhotoEnBitmap();
             mViewImage.setImageBitmap(actualUserImage);
-        //}
+        }
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         displayView(R.id.nav_home);

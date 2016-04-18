@@ -157,7 +157,7 @@ public class IEditProfile extends Activity {
                 if(bp != null)
                     DBContent.getInstance().getActualParticipant().setPhotoEnBitmap(bp);
 
-                DBContent.getInstance().updateParticipantInformationInRemoteContentMah();
+                DBContent.getInstance().updateParticipantInformationInRemoteContent();
 
                 /* Après l'enregistrement  on revient  a choose group act */
                 Toast.makeText(getApplicationContext(),
