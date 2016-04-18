@@ -187,7 +187,8 @@ public class Parseur {
             participant.setCourriel(json.getJSONObject(i).getString("courriel"));
             participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
             participant.setIdPosition(json.getJSONObject(i).getString("position_idposition"));
-            participant.setPassword(json.getJSONObject(i).getString("password"));
+            participant.setRank((int) json.getJSONObject(i).getDouble("rank"));
+            participant.setDistanceParcourue(json.getJSONObject(i).getDouble("distance_run"));
             participant.setAverageSpeed(json.getJSONObject(i).getDouble("average_speed"));
             participantMap.put(participant.getId(), participant);
         }

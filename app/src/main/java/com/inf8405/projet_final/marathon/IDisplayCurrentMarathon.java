@@ -93,6 +93,7 @@ public class IDisplayCurrentMarathon extends Activity {
         setContentView(R.layout.activity_display_current_marathon);
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
+        fWinnersParticipantsList = new ArrayList<>();
         /* Get actual marathon map */
         fActualMarathonMap = DBContent.getInstance().getListActualMarathon();
         for(Map.Entry<String, Marathon> entry : fActualMarathonMap.entrySet())
@@ -129,14 +130,14 @@ public class IDisplayCurrentMarathon extends Activity {
         {
             fWinnersParticipantsList.add(entry.getValue());
         }
-        f1stNom.setText(fWinnersParticipantsList.get(0).getNom());
-        f1stSpeed.setText((int) fWinnersParticipantsList.get(0).getAverageSpeed());
-        f2ndNom.setText(fWinnersParticipantsList.get(1).getNom());
-        f2ndSpeed.setText((int) fWinnersParticipantsList.get(1).getAverageSpeed());
-        f3rdNom.setText(fWinnersParticipantsList.get(2).getNom());
-        f3rdSpeed.setText((int) fWinnersParticipantsList.get(2).getAverageSpeed());
-        fMeNom.setText(DBContent.getInstance().getActualParticipant().getNom());
-        fMeSpeed.setText((int) DBContent.getInstance().getActualParticipant().getAverageSpeed());
+        f1stNom.setText(fWinnersParticipantsList.get(0).getCourriel().substring(0, fWinnersParticipantsList.get(0).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(0).getAverageSpeed())+" km/h");
+        f1stSpeed.setText("");
+        f2ndNom.setText(fWinnersParticipantsList.get(1).getCourriel().substring(0, fWinnersParticipantsList.get(1).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(1).getAverageSpeed())+" km/h");
+        f2ndSpeed.setText("");
+        f3rdNom.setText(fWinnersParticipantsList.get(2).getCourriel().substring(0, fWinnersParticipantsList.get(2).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(2).getAverageSpeed())+" km/h");
+        f3rdSpeed.setText("");
+        fMeNom.setText(DBContent.getInstance().getActualParticipant().getCourriel().substring(0, DBContent.getInstance().getActualParticipant().getCourriel().indexOf('@'))+", "+String.valueOf((int) DBContent.getInstance().getActualParticipant().getAverageSpeed())+" km/h");
+        fMeSpeed.setText("");
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText(fActualMarathon.getHumidity() + " %");
