@@ -84,6 +84,19 @@ public class Parseur {
 
     }
 
+    public static String ParseParticipantWithoutPositionToJsonFormatMah(Participant participant) throws JSONException {
+
+        JSONObject userJson = new JSONObject();
+        // create user
+
+        userJson.put("idparticipant",participant.getId());
+        userJson.put("courriel",participant.getCourriel());
+        userJson.put("photo",participant.getPhotoEn64());
+        userJson.put("position_idposition",participant.getIdPosition());
+        userJson.put("password",participant.getPassword());
+
+        return userJson.toString();
+    }
     //Obtenir la liste des marathons
 
     public static Map<String,Marathon> ParseToMarathonMap(String message) throws JSONException {
@@ -175,6 +188,7 @@ public class Parseur {
             participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
             participant.setIdPosition(json.getJSONObject(i).getString("position_idposition"));
             participant.setPassword(json.getJSONObject(i).getString("password"));
+            participant.setAverageSpeed(json.getJSONObject(i).getDouble("average_speed"));
             participantMap.put(participant.getId(), participant);
         }
         return participantMap;
@@ -239,7 +253,10 @@ public class Parseur {
             marathon.setPositionDepartLongitude(json.getJSONObject(i).getDouble("position_depart_longitude"));
             marathon.setTemperature(json.getJSONObject(i).getDouble("temperature"));
             marathon.setHumidity(json.getJSONObject(i).getDouble("humidity"));
-            marathon.setActual(json.getJSONObject(i).getBoolean("actual"));
+            if(json.getJSONObject(i).getInt("actual") == 1)
+                marathon.setActual(true);
+            else
+                marathon.setActual(false);
             marathonMap.put(marathon.getId(), marathon);
         }
         return marathonMap;
@@ -267,7 +284,10 @@ public class Parseur {
             marathon.setPositionDepartLongitude(json.getJSONObject(i).getDouble("position_depart_longitude"));
             marathon.setTemperature(json.getJSONObject(i).getDouble("temperature"));
             marathon.setHumidity(json.getJSONObject(i).getDouble("humidity"));
-            marathon.setActual(json.getJSONObject(i).getBoolean("actual"));
+            if(json.getJSONObject(i).getInt("actual") == 1)
+                marathon.setActual(true);
+            else
+                marathon.setActual(false);
 
             marathonMap.put(marathon.getId(), marathon);
         }

@@ -187,7 +187,7 @@ public class DBContent {
             public void run() {
                 Log.d("marathon actual test", "c mon test a moi");
                 try{
-                    maps.add(Parseur.ParseToHistoricMarathonMap(DBConnexion.getRequest("http://najibarbaoui.com/api/actual_marathon.php"))) ;
+                    maps.add(Parseur.ParseToActualMarathonMap(DBConnexion.getRequest("http://najibarbaoui.com/api/actual_marathon.php"))) ;
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

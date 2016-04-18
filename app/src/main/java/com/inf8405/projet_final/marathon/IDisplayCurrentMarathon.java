@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +45,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,10 +55,10 @@ import javax.xml.parsers.ParserConfigurationException;
 public class IDisplayCurrentMarathon extends Activity {
     final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
-    double fStartPointLatitude = 45.5024062;
-    double fStartPointLongitude = -73.6282954;
-    double fEndPointLatitude = 45.5006058;
-    double fEndPointLongitude = -73.6262171;
+    double fStartPointLatitude = 45.4877866;
+    double fStartPointLongitude = -73.633085;
+    double fEndPointLatitude = 45.5032186;
+    double fEndPointLongitude = -73.6261043;
     private String fMarathonName;
     private TextView f1stNom = null;
     private TextView f1stSpeed = null;
@@ -80,6 +82,10 @@ public class IDisplayCurrentMarathon extends Activity {
     private GeocodingLocation fLocationAddress;
     private String distanceFromXML = "";
     private boolean drawPathallowed = false;
+    private Map<String,Marathon> fActualMarathonMap;
+    private Marathon fActualMarathon;
+    Map<String,Participant> fWinnersParticipants;
+    private ArrayList<Participant> fWinnersParticipantsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +93,19 @@ public class IDisplayCurrentMarathon extends Activity {
         setContentView(R.layout.activity_display_current_marathon);
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
+        /* Get actual marathon map */
+        fActualMarathonMap = DBContent.getInstance().getListActualMarathon();
+        for(Map.Entry<String, Marathon> entry : fActualMarathonMap.entrySet())
+        {
+            if(entry.getValue().getNom().equals(fMarathonName)){
+                fActualMarathon = entry.getValue();
+                fStartPointLatitude = entry.getValue().getPositionDepartLatitude();
+                fStartPointLongitude = entry.getValue().getPositionDepartLongitude();
+                fEndPointLatitude = entry.getValue().getPositionArriveeLatitude();
+                fEndPointLongitude = entry.getValue().getPositionArriveeLongitude();
+            }
+        }
+
 
         FragmentManager myFragmentManager = getFragmentManager();
         MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DMA);
@@ -104,19 +123,24 @@ public class IDisplayCurrentMarathon extends Activity {
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
 
-        f1stNom.setText("name1");
-        f1stSpeed.setText("speed1");
-        f2ndNom.setText("name2");
-        f2ndSpeed.setText("speed2");
-        f3rdNom.setText("name3");
-        f3rdSpeed.setText("speed3");
-        fMeNom.setText("my name");
-        fMeSpeed.setText("my speed");
+        /* Get the first 3 winners */
+        fWinnersParticipants = DBContent.getInstance().getWinnersParticipant(fActualMarathon.getId());
+        for(Map.Entry<String, Participant> entry : fWinnersParticipants.entrySet())
+        {
+            fWinnersParticipantsList.add(entry.getValue());
+        }
+        f1stNom.setText(fWinnersParticipantsList.get(0).getNom());
+        f1stSpeed.setText((int) fWinnersParticipantsList.get(0).getAverageSpeed());
+        f2ndNom.setText(fWinnersParticipantsList.get(1).getNom());
+        f2ndSpeed.setText((int) fWinnersParticipantsList.get(1).getAverageSpeed());
+        f3rdNom.setText(fWinnersParticipantsList.get(2).getNom());
+        f3rdSpeed.setText((int) fWinnersParticipantsList.get(2).getAverageSpeed());
+        fMeNom.setText(DBContent.getInstance().getActualParticipant().getNom());
+        fMeSpeed.setText((int) DBContent.getInstance().getActualParticipant().getAverageSpeed());
 
         fDistance.setText("Pas encore calculé!");
-        fHumidity.setText("Pas encore calculé!");
-        fTemp.setText("Pas encore calculé!");
-        fHumidity.setText("Pas encore calculé!");
+        fHumidity.setText(fActualMarathon.getHumidity() + " %");
+        fTemp.setText(fActualMarathon.getTemperature() + " C");
 
         fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DMA);
 
@@ -132,22 +156,22 @@ public class IDisplayCurrentMarathon extends Activity {
         /* Display path */
          /* get longitude and latitude of start point address */
         fLocationAddress = new GeocodingLocation();
-        fLocationAddress.getAddressFromLocation(fStartPoint, getApplicationContext(), new GeocoderHandler());
+        //fLocationAddress.getAddressFromLocation(fStartPoint, getApplicationContext(), new GeocoderHandler());
 
         /* get longitude and latitude of end point address */
-        fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
+        //fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
 
         /* Create start and end point of marathon path */
         LatLng srcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
         LatLng destLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
 
         fMap.addMarker(new MarkerOptions()
-                .position(srcLatLng).title("Source place"));
+                .position(srcLatLng).title("Start point"));
 
         fMap.animateCamera(CameraUpdateFactory.newLatLng(srcLatLng));
 
         fMap.addMarker(new MarkerOptions()
-                .position(destLatLng).title("Destination place"));
+                .position(destLatLng).title("Arrival point"));
 
         // Enabling MyLocation in Google Map
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

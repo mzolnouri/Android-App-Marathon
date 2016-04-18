@@ -54,8 +54,8 @@ public class IEditProfile extends Activity {
         mEdTxtNewPassword = (EditText) findViewById(R.id.edtTxtNewPasswordEP);
         mEdTxtComfirmNewPassword = (EditText) findViewById(R.id.edtTxtConfirmNewPasswordEP);
         viewImage=(ImageView)findViewById(R.id.imgVwProfileImgEP);
-        //Bitmap actualUserImage = DBContent.getInstance().getActualParticipant().getPhotoEnBitmap();
-        //viewImage.setImageBitmap(actualUserImage);
+        Bitmap actualUserImage = DBContent.getInstance().getActualParticipant().getPhotoEnBitmap();
+        viewImage.setImageBitmap(actualUserImage);
 
         btnUpdateProfile = (Button) findViewById(R.id.btnUpdateProfileEP);
         btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
