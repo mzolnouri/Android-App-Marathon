@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
 public class FNavHome extends Fragment {
     private View homeView;
-    private ArrayList<String> fMarathons;
+    private ArrayList<String> fHistoricMarathonsList;
+    private ArrayList<String> fActalMarathonsList;
+    private ArrayList<String> fHistoricMarathonsListZapas;
+    private ArrayList<String> fActalMarathonsListZapas;
     /* Marathon fList */
     private ListView fListView;
     /* Cursor to load marathons list */
@@ -37,50 +42,45 @@ public class FNavHome extends Fragment {
     private RadioButton radioButtonItem;
     private int mIdGroupe;
     private boolean isHistoricMarathonListSelected = true;
-
+    Map<String,Marathon> fHistoricMarathonMap;
+    Map<String,Marathon> fActualMarathonMap;
     Activity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceBundle){
         mActivity = getActivity();
-
+        fHistoricMarathonsList = (ArrayList<String>) new ArrayList<String>();
+        fActalMarathonsList = (ArrayList<String>) new ArrayList<String>();
+        fHistoricMarathonsListZapas = (ArrayList<String>) new ArrayList<String>();
+        fActalMarathonsListZapas = (ArrayList<String>) new ArrayList<String>();
         homeView = inflater.inflate(R.layout.activity_nav_home, container, false);
 
         //fMarathons = DBContent.getInstance().getListHistoricMarathon();
         /* <Just for test> */
-        Marathon m1 = new Marathon();
-        m1.setNom("Boston Maraton");
-        m1.setDistance(110.0);
-        Marathon m2 = new Marathon();
-        m2.setNom("New York Maraton");
-        m2.setDistance(120.0);
-        Marathon m3 = new Marathon();
-        m3.setNom("Montreal Maraton");
-        m3.setDistance(130.0);
-        Marathon m4 = new Marathon();
-        m4.setNom("Vancouver Maraton");
-        m4.setDistance(140.0);
-        Marathon m5 = new Marathon();
-        m5.setNom("Tokyo Maraton");
-        m5.setDistance(150.0);
 
-        fMarathons = new ArrayList<>();
-        fMarathons.add(m1.getNom());
-        fMarathons.add(m2.getNom());
-        fMarathons.add(m3.getNom());
-        fMarathons.add(m4.getNom());
-        fMarathons.add(m5.getNom());
+        /* Get historic marathon map */
+        fHistoricMarathonMap = DBContent.getInstance().getListHistoricMarathon();
+        fListView = (ListView) homeView.findViewById(R.id.lstVw_Marathons_FNH);
+        for(Map.Entry<String, Marathon> entry : fHistoricMarathonMap.entrySet())
+        {
+            fHistoricMarathonsList.add(entry.getValue().getNom());
+            fHistoricMarathonsListZapas.add(entry.getValue().getNom());
 
-        this.fArrayList = new ArrayList<String>();
-        fArrayList.addAll(fMarathons);
+        }
+        /* Get actual marathon map */
+        fActualMarathonMap = DBContent.getInstance().getListActualMarathon();
+        fListView = (ListView) homeView.findViewById(R.id.lstVw_Marathons_FNH);
+        for(Map.Entry<String, Marathon> entry : fActualMarathonMap.entrySet())
+        {
+            fActalMarathonsList.add(entry.getValue().getNom());
+            fActalMarathonsListZapas.add(entry.getValue().getNom());
+
+        }
 
         /* Manage radio group */
         mRadioGroup = (RadioGroup) homeView.findViewById(R.id.rdGrp_ListMarthon);
-
         mRadioGroup.check(R.id.rdBtnLMH);
         mIdGroupe = mRadioGroup.getCheckedRadioButtonId();
-
-
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -88,50 +88,72 @@ public class FNavHome extends Fragment {
                     case R.id.rdBtnLMH:
                         //fMarathons = DBContent.getInstance().getListHistoricMarathon();
                         isHistoricMarathonListSelected = true;
+                        if (fHistoricMarathonsList != null) {
+                            Log.e("count", "" + fHistoricMarathonsList.size());
+                            if (fHistoricMarathonsList.size() == 0) {
+                                Toast.makeText(getContext(), "No historic marathon in your list.", Toast.LENGTH_LONG).show();
+                            }
+
+                            fMarathonAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, fHistoricMarathonsList);
+                            fListView.setAdapter(fMarathonAdapter);
+                            fListView.setFastScrollEnabled(true);
+
+                        } else {
+                            Log.e("Cursor close 1", "----------------");
+                        }
 
                         break;
                     case R.id.rdBtnLMA:
                         //fMarathons = DBContent.getInstance().getListActualMarathon();
                         isHistoricMarathonListSelected = false;
+                        if (fActalMarathonsList != null) {
+                            Log.e("count", "" + fActalMarathonsList.size());
+                            if (fActalMarathonsList.size() == 0) {
+                                Toast.makeText(getContext(), "No historic marathon in your list.", Toast.LENGTH_LONG).show();
+                            }
+
+                            fMarathonAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, fActalMarathonsList);
+                            fListView.setAdapter(fMarathonAdapter);
+                            fListView.setFastScrollEnabled(true);
+
+                        } else {
+                            Log.e("Cursor close 1", "----------------");
+                        }
                         break;
                 }
             }
         });
 
-        /* </Just for test> */
-
-//        Map<String,Marathon> myMap=DBContent.getInstance().GetMarathonMap(DBContent.getInstance().getActualParticipant().getId());
-        fListView = (ListView) homeView.findViewById(R.id.lstVw_Marathons_FNH);
-//        for(Map.Entry<String, Marathon> entry : myMap.entrySet())
-//        {
-//            fMarathons.add(entry.getValue());
-//
-//        }
-
         //fResolver = this.getContentResolver();
 
 
-        if (fMarathons != null) {
-            Log.e("count", "" + fMarathons.size());
-            if (fMarathons.size() == 0) {
+        if (fHistoricMarathonsList != null) {
+            Log.e("count", "" + fHistoricMarathonsList.size());
+            if (fHistoricMarathonsList.size() == 0) {
                 Toast.makeText(getContext(), "No contacts in your contact list.", Toast.LENGTH_LONG).show();
             }
 
-            fMarathonAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, fMarathons);
+            fMarathonAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, fHistoricMarathonsList);
             fListView.setAdapter(fMarathonAdapter);
 
             // Select item on listclick
             fListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    Log.e("search", "here---------------- listener");
-
-                    //DBContent dbContent=DBContent.getInstance();
-                    //Marathon marathonData = fMarathons.get(i);
-                    Toast.makeText(getContext(), "You've selected: " + fMarathons.get(i), Toast.LENGTH_LONG).show();
-                    ShowMarathonPath(view, i);
+                    if (isHistoricMarathonListSelected) {
+                        //DBContent dbContent=DBContent.getInstance();
+                        //Marathon marathonData = fMarathons.get(i);
+                        Toast.makeText(getContext(), "You've selected: " + fHistoricMarathonsList.get(i), Toast.LENGTH_LONG).show();
+                        ShowMarathonPath(view, i);
+                    }
+                    else{
+                        //DBContent dbContent=DBContent.getInstance();
+                        //Marathon marathonData = fMarathons.get(i);
+                        Toast.makeText(getContext(), "You've selected: " + fActalMarathonsList.get(i), Toast.LENGTH_LONG).show();
+                        ShowMarathonPath(view, i);
+                    }
                 }
+
             });
 
             fListView.setFastScrollEnabled(true);
@@ -158,33 +180,52 @@ public class FNavHome extends Fragment {
     }
     // Filter Class
     public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        fMarathons.clear();
-        if (charText.length() == 0) {
-            fMarathons.addAll(fArrayList);
-        } else {
-            for (String wp : fArrayList) {
-                if (wp.toLowerCase(Locale.getDefault())
-                        .contains(charText)) {
-                    fMarathons.add(wp);
+        if(isHistoricMarathonListSelected) {
+            charText = charText.toLowerCase(Locale.getDefault());
+            fHistoricMarathonsList.clear();
+            if (charText.length() == 0) {
+                fHistoricMarathonsList.addAll(fHistoricMarathonsListZapas);
+            } else {
+                for (String wp : fHistoricMarathonsListZapas) {
+                    if (wp.toLowerCase(Locale.getDefault())
+                            .contains(charText)) {
+                        fHistoricMarathonsList.add(wp);
+                    }
                 }
             }
+            fMarathonAdapter.notifyDataSetChanged();
         }
-        fMarathonAdapter.notifyDataSetChanged();
+        else{
+            charText = charText.toLowerCase(Locale.getDefault());
+            fActalMarathonsList.clear();
+            if (charText.length() == 0) {
+                fActalMarathonsList.addAll(fActalMarathonsListZapas);
+            } else {
+                for (String wp : fActalMarathonsListZapas) {
+                    if (wp.toLowerCase(Locale.getDefault())
+                            .contains(charText)) {
+                        fActalMarathonsList.add(wp);
+                    }
+                }
+            }
+            fMarathonAdapter.notifyDataSetChanged();
+        }
     }
     public void ShowMarathonPath (View view, int index) {
 
         /* Display historic ou actual marathon in view list */
         if(isHistoricMarathonListSelected) {
+            Toast.makeText(getContext(), "You've selected: " + fHistoricMarathonsList.get(index), Toast.LENGTH_LONG).show();
             Intent i = new Intent(getActivity(), IDisplayHistoricMarathon.class);
             Bundle marathonName = new Bundle();
-            marathonName.putString("marathonName", fMarathons.get(index));
+            marathonName.putString("marathonName", fHistoricMarathonsList.get(index));
             i.putExtras(marathonName);
             startActivity(i);
         }else{
+            Toast.makeText(getContext(), "You've selected: " + fActalMarathonsList.get(index), Toast.LENGTH_LONG).show();
             Intent i = new Intent(getActivity(), IDisplayCurrentMarathon.class);
             Bundle marathonName = new Bundle();
-            marathonName.putString("marathonName", fMarathons.get(index));
+            marathonName.putString("marathonName", fActalMarathonsList.get(index));
             i.putExtras(marathonName);
             startActivity(i);
 

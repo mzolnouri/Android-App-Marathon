@@ -100,8 +100,27 @@ public class DBContent {
 
     }
 
-    public void updateParticipantInformationInRemoteContent(){
-        // To Do
+    public void updateParticipantInformationInRemoteContentMah(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String temp = DBConnexion.postRequest("http://najibarbaoui.com/api/update_utilisateur.php", Parseur.ParseParticipantWithoutPositionToJsonFormatMah(participantMap_.get(actualParticipantId_)));
+                    Log.d("okkkkkkaa", temp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -168,7 +187,7 @@ public class DBContent {
             public void run() {
                 Log.d("marathon actual test", "c mon test a moi");
                 try{
-                    maps.add(Parseur.ParseToHistoricMarathonMap(DBConnexion.getRequest("http://najibarbaoui.com/api/actual_marathon.php"))) ;
+                    maps.add(Parseur.ParseToActualMarathonMap(DBConnexion.getRequest("http://najibarbaoui.com/api/actual_marathon.php"))) ;
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
