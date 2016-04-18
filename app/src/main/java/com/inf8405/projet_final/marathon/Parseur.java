@@ -188,6 +188,7 @@ public class Parseur {
             participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
             participant.setIdPosition(json.getJSONObject(i).getString("position_idposition"));
             participant.setPassword(json.getJSONObject(i).getString("password"));
+            participant.setAverageSpeed(json.getJSONObject(i).getDouble("average_speed"));
             participantMap.put(participant.getId(), participant);
         }
         return participantMap;

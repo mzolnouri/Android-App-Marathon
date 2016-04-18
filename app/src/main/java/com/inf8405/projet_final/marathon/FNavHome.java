@@ -42,9 +42,9 @@ public class FNavHome extends Fragment {
     private RadioButton radioButtonItem;
     private int mIdGroupe;
     private boolean isHistoricMarathonListSelected = true;
-    Map<String,Marathon> fHistoricMarathonMap;
-    Map<String,Marathon> fActualMarathonMap;
-    Activity mActivity;
+    private Map<String,Marathon> fHistoricMarathonMap;
+    private Map<String,Marathon> fActualMarathonMap;
+    private Activity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceBundle){
