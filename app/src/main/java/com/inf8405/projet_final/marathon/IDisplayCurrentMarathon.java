@@ -11,6 +11,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +48,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +57,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 
-public class IDisplayCurrentMarathon extends Activity {
+public class IDisplayCurrentMarathon extends Activity implements SensorEventListener {
     final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
     double fStartPointLatitude = 45.4877866;
@@ -67,6 +72,7 @@ public class IDisplayCurrentMarathon extends Activity {
     private TextView f3rdNom = null;
     private TextView f3rdSpeed = null;
     private TextView fMeNom = null;
+    private TextView fMeAcceleration = null;
     private TextView fMeSpeed = null;
     private TextView fDistance = null;
     private TextView fTemp = null;
@@ -78,6 +84,7 @@ public class IDisplayCurrentMarathon extends Activity {
     private String fBM = "5700 Chemin Cote-Des-Neiges, Montreal, Canada";
     private String fEndPoint = "13100 Boulevard Henri Fabre, Mirabel, Canada";
     private String latLongFromAdd = "";
+    private String fMyname;
     private MarkerOptions markerOptions;
     private GeocodingLocation fLocationAddress;
     private String distanceFromXML = "";
@@ -86,6 +93,14 @@ public class IDisplayCurrentMarathon extends Activity {
     private Marathon fActualMarathon;
     Map<String,Participant> fWinnersParticipants;
     private ArrayList<Participant> fWinnersParticipantsList;
+    private SensorManager sensorManager;
+    double ax,ay,az;   // these are the acceleration in x,y and z axis
+    double initialSpeed =0.0;
+    double speed =0.0;
+    Date timeStart;
+    double currentA = 0.0;
+    double lastA = 0.0;
+    boolean toggle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +138,7 @@ public class IDisplayCurrentMarathon extends Activity {
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DMA);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
+        fMeAcceleration = (TextView) findViewById(R.id.TV_ACCEL_Value_DMA);
 
         /* Get the first 3 winners */
         fWinnersParticipants = DBContent.getInstance().getWinnersParticipant(fActualMarathon.getId());
@@ -130,13 +146,14 @@ public class IDisplayCurrentMarathon extends Activity {
         {
             fWinnersParticipantsList.add(entry.getValue());
         }
-        f1stNom.setText(fWinnersParticipantsList.get(0).getCourriel().substring(0, fWinnersParticipantsList.get(0).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(0).getAverageSpeed())+" km/h");
+        f1stNom.setText(fWinnersParticipantsList.get(0).getCourriel().substring(0, fWinnersParticipantsList.get(0).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(0).getAverageSpeed())+" Km/h");
         f1stSpeed.setText("");
-        f2ndNom.setText(fWinnersParticipantsList.get(1).getCourriel().substring(0, fWinnersParticipantsList.get(1).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(1).getAverageSpeed())+" km/h");
+        f2ndNom.setText(fWinnersParticipantsList.get(1).getCourriel().substring(0, fWinnersParticipantsList.get(1).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(1).getAverageSpeed())+" Km/h");
         f2ndSpeed.setText("");
-        f3rdNom.setText(fWinnersParticipantsList.get(2).getCourriel().substring(0, fWinnersParticipantsList.get(2).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(2).getAverageSpeed())+" km/h");
+        f3rdNom.setText(fWinnersParticipantsList.get(2).getCourriel().substring(0, fWinnersParticipantsList.get(2).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(2).getAverageSpeed())+" Km/h");
         f3rdSpeed.setText("");
-        fMeNom.setText(DBContent.getInstance().getActualParticipant().getCourriel().substring(0, DBContent.getInstance().getActualParticipant().getCourriel().indexOf('@'))+", "+String.valueOf((int) DBContent.getInstance().getActualParticipant().getAverageSpeed())+" km/h");
+        fMyname = DBContent.getInstance().getActualParticipant().getCourriel().substring(0, DBContent.getInstance().getActualParticipant().getCourriel().indexOf('@'));
+        fMeNom.setText(fMyname +", "+String.valueOf((int) DBContent.getInstance().getActualParticipant().getAverageSpeed())+" km/h");
         fMeSpeed.setText("");
 
         fDistance.setText("Pas encore calculé!");
@@ -194,6 +211,12 @@ public class IDisplayCurrentMarathon extends Activity {
         fMap.animateCamera(CameraUpdateFactory.newLatLngZoom(srcLatLng, 12));
         markerOptions = new MarkerOptions();
 
+        /* Get speed from accelerator */
+        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        timeStart = new Date(System.currentTimeMillis());
+        initialSpeed =0.0;
+
 
         // Polyline line = fMap.addPolyline(new PolylineOptions().add(srcLatLng, destLatLng).width(5).color(Color.RED));
         connectAsyncTask _connectAsyncTask = new connectAsyncTask();
@@ -237,6 +260,70 @@ public class IDisplayCurrentMarathon extends Activity {
         }else{
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        double vitesse_x, vitesse_y, vitesse_z;
+        Date timeNow = new Date(System.currentTimeMillis());
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            double time = (timeNow.getTime() - timeStart.getTime()) / 1000.0;
+            ax = event.values[0];
+            ay = event.values[1];
+            az = event.values[2];
+            //fMeSpeed.setText(" x= " + ax + " y= " + ay + " z= " + az);
+            fMeNom.setText(fMyname +", "+" x= " + ax + " y= " + ay + " z= " + az);
+//            if(Math.abs(ax)>= 9){ // enlever la garvite = 9.81
+//                ax = (Math.abs(ax)- 9.81);
+//            }
+//            if(Math.abs(ay)>= 9){ // enlever la garvite = 9.81
+//                ay = (Math.abs(ay) - 9.81);
+//            }
+//            if(Math.abs(az)>= 9){ // enlever la garvite = 9.81
+//                az = (Math.abs(az) - 9.81);
+//            }
+
+            double a = Math.sqrt(Math.pow(ax, 2) + Math.pow(ay, 2)
+                    + Math.pow(az, 2));
+            if (a > 9) { // enlever la garvite = 9.81
+                a = a - 9;
+            } else if (a > 0) {
+                a = 0;
+            }
+//            a = a - 9.81;
+            if (toggle) {
+                currentA = a;
+                toggle = !toggle;
+            } else {
+                lastA = a;
+                toggle = !toggle;
+            }
+
+            double acceleration = 0.0;
+            if (currentA > lastA) {
+                acceleration = a;
+
+            } else {
+                acceleration = -a;
+            }
+            speed = initialSpeed + acceleration * time; // v= v0 + a*t (km par seconde)
+
+            if (speed < 0) {
+                speed = 0;
+                initialSpeed = 0;
+            }
+            fMeNom.setText(fMyname + ", " +Double.toString(Math.floor(speed*3.6))+"Km/h"); //
+            fMeAcceleration.setText(Double.toString(Math.floor(a))+":m/s2"); //
+            initialSpeed = speed;
+            timeStart.setTime(System.currentTimeMillis());
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
@@ -324,15 +411,6 @@ public class IDisplayCurrentMarathon extends Activity {
 
         StringBuilder urlStr = new StringBuilder();
         urlStr.append("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Montreal&destinations=Mirabel&mode=walking&language=fr-FR");
-//        urlStr.append(fStartPointLatitude);
-//        urlStr.append(",");
-//        urlStr.append(fStartPointLongitude);
-//        urlStr.append("&destination=");//to
-//        urlStr.append(fEndPointLatitude);
-//        urlStr.append(",");
-//        urlStr.append(fEndPointLongitude);
-//        urlStr.append("&mode=walking&language=fr-FR");
-//        Log.d("url","::"+urlStr.toString());
         HttpURLConnection urlConnectionDis= null;
         URL urlDis = null;
         try

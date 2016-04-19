@@ -218,6 +218,27 @@
                     android:layout_toRightOf="@+id/TV_Hum_DMA"
                     android:text=" ... " />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/LL_ACCEL_DMA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LL_Humidity_DMA"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/TV_ACCEL_DMA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="Accélération : " />
+
+                <TextView
+                    android:id="@+id/TV_ACCEL_Value_DMA"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/TV_ACCEL_DMA"
+                    android:text=" ... " />
+            </LinearLayout>
         </RelativeLayout>
 
     </RelativeLayout>
