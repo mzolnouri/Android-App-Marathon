@@ -233,8 +233,8 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         // Polyline line = fMap.addPolyline(new PolylineOptions().add(srcLatLng, destLatLng).width(5).color(Color.RED));
         connectAsyncTask _connectAsyncTask = new connectAsyncTask();
         _connectAsyncTask.execute();
+        //while(true)
 
-        runThread();
 
 
     }
@@ -359,10 +359,12 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
             fMeNom.setText(fMyname + ", " +Double.toString(Math.floor(speed*3.6))+"Km/h"); //
             fMeAcceleration.setText(Double.toString(Math.floor(a))+" m/s2"); //
             initialSpeed = speed;
+            if(ax == 0.0 && ay == 0.0 && az == 0.0)
+                initialSpeed = 0.0;
 
             timeStart.setTime(System.currentTimeMillis());
         }
-
+        runThread();
     }
 
     @Override

@@ -47,7 +47,8 @@
         <activity
             android:name=".IPresentationPage"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,23 +63,29 @@
             android:label="@string/title_activity_sign_up" />
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".IMainMenu"
             android:label="@string/title_activity_imain_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".IEditProfile"
-            android:label="@string/title_activity_edit_profile" />
+            android:label="@string/title_activity_edit_profile"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".IDisplayHistoricMarathon"
-            android:label="@string/title_activity_display_historic_marathon" />
+            android:label="@string/title_activity_display_historic_marathon"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".IDisplayCurrentMarathon"
-            android:label="@string/title_activity_display_current_marathon" />
+            android:label="@string/title_activity_display_current_marathon"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MFindLocation"
-            android:label="@string/title_activity_find_location" />
+            android:label="@string/title_activity_find_location"
+            android:screenOrientation="portrait"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
