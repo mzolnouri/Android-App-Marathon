@@ -66,14 +66,10 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
     double fEndPointLongitude = -73.6261043;
     private String fMarathonName;
     private TextView f1stNom = null;
-    private TextView f1stSpeed = null;
     private TextView f2ndNom = null;
-    private TextView f2ndSpeed = null;
     private TextView f3rdNom = null;
-    private TextView f3rdSpeed = null;
     private TextView fMeNom = null;
     private TextView fMeAcceleration = null;
-    private TextView fMeSpeed = null;
     private TextView fDistance = null;
     private TextView fTemp = null;
     private TextView fHumidity = null;
@@ -128,13 +124,9 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         fMap = myMapFragment.getMap();
 
         f1stNom = (TextView) findViewById(R.id.TV_1stNTS_Nom_Value_DMA);
-        f1stSpeed = (TextView) findViewById(R.id.TV_1stNTS_Speed_Value_DMA);
         f2ndNom = (TextView) findViewById(R.id.TV_2ndNTS_Nom_Value_DMA);
-        f2ndSpeed = (TextView) findViewById(R.id.TV_2ndNTS_Speed_Value_DMA);
         f3rdNom = (TextView) findViewById(R.id.TV_3rdNTS_Nom_Value_DMA);
-        f3rdSpeed = (TextView) findViewById(R.id.TV_3rdNTS_Speed_Value_DMA);
         fMeNom = (TextView) findViewById(R.id.TV_MeNTS_Nom_Value_DMA);
-        fMeSpeed = (TextView) findViewById(R.id.TV_MeNTS_Speed_Value_DMA);
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DMA);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
@@ -147,14 +139,10 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
             fWinnersParticipantsList.add(entry.getValue());
         }
         f1stNom.setText(fWinnersParticipantsList.get(0).getCourriel().substring(0, fWinnersParticipantsList.get(0).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(0).getAverageSpeed())+" Km/h");
-        f1stSpeed.setText("");
         f2ndNom.setText(fWinnersParticipantsList.get(1).getCourriel().substring(0, fWinnersParticipantsList.get(1).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(1).getAverageSpeed())+" Km/h");
-        f2ndSpeed.setText("");
         f3rdNom.setText(fWinnersParticipantsList.get(2).getCourriel().substring(0, fWinnersParticipantsList.get(2).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(2).getAverageSpeed())+" Km/h");
-        f3rdSpeed.setText("");
         fMyname = DBContent.getInstance().getActualParticipant().getCourriel().substring(0, DBContent.getInstance().getActualParticipant().getCourriel().indexOf('@'));
         fMeNom.setText(fMyname +", "+String.valueOf((int) DBContent.getInstance().getActualParticipant().getAverageSpeed())+" km/h");
-        fMeSpeed.setText("");
 
         fDistance.setText("Pas encore calculé!");
         fHumidity.setText(fActualMarathon.getHumidity() + " %");
@@ -273,7 +261,6 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
             ax = event.values[0];
             ay = event.values[1];
             az = event.values[2];
-            //fMeSpeed.setText(" x= " + ax + " y= " + ay + " z= " + az);
             fMeNom.setText(fMyname +", "+" x= " + ax + " y= " + ay + " z= " + az);
 //            if(Math.abs(ax)>= 9){ // enlever la garvite = 9.81
 //                ax = (Math.abs(ax)- 9.81);
@@ -315,8 +302,9 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
                 initialSpeed = 0;
             }
             fMeNom.setText(fMyname + ", " +Double.toString(Math.floor(speed*3.6))+"Km/h"); //
-            fMeAcceleration.setText(Double.toString(Math.floor(a))+":m/s2"); //
+            fMeAcceleration.setText(Double.toString(Math.floor(a))+" m/s2"); //
             initialSpeed = speed;
+
             timeStart.setTime(System.currentTimeMillis());
         }
 
