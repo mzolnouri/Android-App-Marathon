@@ -200,9 +200,9 @@ public class IDisplayHistoricMarathon extends Activity {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
         if (resultCode == ConnectionResult.SUCCESS){
-            Toast.makeText(getApplicationContext(),
-                    "isGooglePlayServicesAvailable SUCCESS",
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),
+//                    "isGooglePlayServicesAvailable SUCCESS",
+//                    Toast.LENGTH_LONG).show();
         }else{
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }

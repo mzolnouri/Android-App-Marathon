@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +33,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -60,10 +60,10 @@ import javax.xml.parsers.ParserConfigurationException;
 public class IDisplayCurrentMarathon extends Activity implements SensorEventListener {
     final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
-    double fStartPointLatitude = 45.4877866;
-    double fStartPointLongitude = -73.633085;
-    double fEndPointLatitude = 45.5032186;
-    double fEndPointLongitude = -73.6261043;
+    private double fStartPointLatitude = 45.4877866;
+    private double fStartPointLongitude = -73.633085;
+    private double fEndPointLatitude = 45.5032186;
+    private double fEndPointLongitude = -73.6261043;
     private String fMarathonName;
     private TextView f1stNom = null;
     private TextView f2ndNom = null;
@@ -87,16 +87,25 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
     private boolean drawPathallowed = false;
     private Map<String,Marathon> fActualMarathonMap;
     private Marathon fActualMarathon;
-    Map<String,Participant> fWinnersParticipants;
+    private Map<String,Participant> fWinnersParticipants;
     private ArrayList<Participant> fWinnersParticipantsList;
     private SensorManager sensorManager;
-    double ax,ay,az;   // these are the acceleration in x,y and z axis
-    double initialSpeed =0.0;
-    double speed =0.0;
-    Date timeStart;
-    double currentA = 0.0;
-    double lastA = 0.0;
-    boolean toggle = true;
+    private double ax,ay,az;   // these are the acceleration in x,y and z axis
+    private double initialSpeed =0.0;
+    private double speed =0.0;
+    private Date timeStart;
+    private double currentA = 0.0;
+    private double lastA = 0.0;
+    private boolean toggle = true;
+    private int fCounter = 0;
+    private LatLng fP1LatLng;
+    private LatLng fP2LatLng;
+    private LatLng fP3LatLng;
+    private LatLng fSrcLatLng;
+    private LatLng fDesLatLng;
+    private  Marker fMarkerP1;
+    private  Marker fMarkerP2;
+    private  Marker fMarkerP3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,16 +177,31 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         //fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
 
         /* Create start and end point of marathon path */
-        LatLng srcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
-        LatLng destLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
+        fSrcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
+        fDesLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
+        for(int k = 0 ; k < fWinnersParticipantsList.size(); k++){
+            fWinnersParticipantsList.get(k).setPosition(DBContent.getInstance().GetUserPosition(fWinnersParticipantsList.get(k).getId(), fActualMarathon.getId()));
+        }
 
-        fMap.addMarker(new MarkerOptions()
-                .position(srcLatLng).title("Start point"));
 
-        fMap.animateCamera(CameraUpdateFactory.newLatLng(srcLatLng));
+        fP1LatLng = new LatLng(fWinnersParticipantsList.get(0).getPosition().getLatitude(), fWinnersParticipantsList.get(0).getPosition().getLongitude());
+        fMarkerP1 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP1LatLng.latitude, fP1LatLng.longitude)).title("First").snippet("participant"));
+        fP2LatLng = new LatLng(fWinnersParticipantsList.get(1).getPosition().getLatitude(), fWinnersParticipantsList.get(1).getPosition().getLongitude());
+        fMarkerP2 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP2LatLng.latitude, fP2LatLng.longitude)).title("Second").snippet("participant"));
+        fP3LatLng = new LatLng(fWinnersParticipantsList.get(2).getPosition().getLatitude(), fWinnersParticipantsList.get(2).getPosition().getLongitude());
+        fMarkerP3 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP3LatLng.latitude, fP3LatLng.longitude)).title("Third").snippet("participant"));
 
-        fMap.addMarker(new MarkerOptions()
-                .position(destLatLng).title("Arrival point"));
+        fMap.addMarker(new MarkerOptions().position(fSrcLatLng).title("Start point"));
+
+        fMap.animateCamera(CameraUpdateFactory.newLatLng(fSrcLatLng));
+
+        fMap.addMarker(new MarkerOptions().position(fDesLatLng).title("Arrival point"));
+
+        //fMap.addMarker(new MarkerOptions().position(fP1LatLng).title("First participant"));
+        //fMap.addMarker(new MarkerOptions().position(fP2LatLng).title("Second participant"));
+        //fMap.addMarker(new MarkerOptions().position(fP3LatLng).title("Third participant"));
+
+
 
         // Enabling MyLocation in Google Map
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -196,7 +220,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         fMap.getUiSettings().setMyLocationButtonEnabled(true);
         fMap.getUiSettings().setAllGesturesEnabled(true);
         fMap.setTrafficEnabled(true);
-        fMap.animateCamera(CameraUpdateFactory.newLatLngZoom(srcLatLng, 12));
+        fMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fSrcLatLng, 12));
         markerOptions = new MarkerOptions();
 
         /* Get speed from accelerator */
@@ -210,7 +234,38 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         connectAsyncTask _connectAsyncTask = new connectAsyncTask();
         _connectAsyncTask.execute();
 
+        runThread();
 
+
+    }
+    private void runThread() {
+
+        new Thread() {
+            public void run() {
+                while (fCounter++ < 1000) {
+                    try {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                fMarkerP1.remove();
+                                fMarkerP2.remove();
+                                fMarkerP3.remove();
+                                fP1LatLng = new LatLng(fWinnersParticipantsList.get(0).getPosition().getLatitude(), fWinnersParticipantsList.get(0).getPosition().getLongitude());
+                                fMarkerP1 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP1LatLng.latitude, fP1LatLng.longitude)).title("First").snippet("participant"));
+                                fP2LatLng = new LatLng(fWinnersParticipantsList.get(1).getPosition().getLatitude(), fWinnersParticipantsList.get(1).getPosition().getLongitude());
+                                fMarkerP2 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP2LatLng.latitude, fP2LatLng.longitude)).title("Second").snippet("participant"));
+                                fP3LatLng = new LatLng(fWinnersParticipantsList.get(2).getPosition().getLatitude(), fWinnersParticipantsList.get(2).getPosition().getLongitude());
+                                fMarkerP3 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP3LatLng.latitude, fP3LatLng.longitude)).title("Third").snippet("participant"));
+                            }
+                        });
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
     }
 
     @Override

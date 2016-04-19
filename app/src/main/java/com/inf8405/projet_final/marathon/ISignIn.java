@@ -74,9 +74,9 @@ public class ISignIn extends AppCompatActivity {
                 }
 
                 if (fAuthentificationReponse.contentEquals(MConstants.ACCESS_GRANTED)) {
-                    Toast.makeText(getApplicationContext(),
-                            "Password is correct :)",
-                            Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(),
+//                            "Password is correct :)",
+//                            Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getBaseContext(), IMainMenu.class);
                     startActivity(i);
                     finish();
