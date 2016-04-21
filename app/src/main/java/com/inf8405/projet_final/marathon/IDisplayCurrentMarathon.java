@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -106,6 +107,9 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
     private  Marker fMarkerP1;
     private  Marker fMarkerP2;
     private  Marker fMarkerP3;
+    // temperature et humidite
+    private SensorManager mSensorManager;
+    private Sensor sTemp, sHumidity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +120,12 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         fWinnersParticipantsList = new ArrayList<>();
         /* Get actual marathon map */
         fActualMarathonMap = DBContent.getInstance().getListActualMarathon();
+        // // Get an instance of the sensor service, and use that to get an instance of
+        // a particular sensor.
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sTemp = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        sHumidity = mSensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+
         for(Map.Entry<String, Marathon> entry : fActualMarathonMap.entrySet())
         {
             if(entry.getValue().getNom().equals(fMarathonName)){
@@ -221,6 +231,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         fMap.getUiSettings().setAllGesturesEnabled(true);
         fMap.setTrafficEnabled(true);
         fMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fSrcLatLng, 12));
+
         markerOptions = new MarkerOptions();
 
         /* Get speed from accelerator */
@@ -238,6 +249,8 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
 
 
     }
+
+
     private void runThread() {
 
         new Thread() {
@@ -257,6 +270,14 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
                                 fMarkerP2 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP2LatLng.latitude, fP2LatLng.longitude)).title("Second").snippet("participant"));
                                 fP3LatLng = new LatLng(fWinnersParticipantsList.get(2).getPosition().getLatitude(), fWinnersParticipantsList.get(2).getPosition().getLongitude());
                                 fMarkerP3 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP3LatLng.latitude, fP3LatLng.longitude)).title("Third").snippet("participant"));
+
+                                // TODO
+                                // position.setTemp()
+                                // position.setHum
+                                // dbcontent.UpdateRemotePosition();
+                                //
+
+
                             }
                         });
                         Thread.sleep(300);
@@ -363,7 +384,12 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
                 initialSpeed = 0.0;
 
             timeStart.setTime(System.currentTimeMillis());
+        } else if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            fTemp.setText(Double.toString(event.values[0]));
+        }else if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
+            fHumidity.setText(Double.toString(event.values[0]));
         }
+
         runThread();
     }
 
