@@ -237,6 +237,8 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         /* Get speed from accelerator */
         sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY), SensorManager.SENSOR_DELAY_NORMAL);
         timeStart = new Date(System.currentTimeMillis());
         initialSpeed =0.0;
 
@@ -327,6 +329,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
 
     }
 
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         double vitesse_x, vitesse_y, vitesse_z;
@@ -338,16 +341,6 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
             ay = event.values[1];
             az = event.values[2];
             fMeNom.setText(fMyname +", "+" x= " + ax + " y= " + ay + " z= " + az);
-//            if(Math.abs(ax)>= 9){ // enlever la garvite = 9.81
-//                ax = (Math.abs(ax)- 9.81);
-//            }
-//            if(Math.abs(ay)>= 9){ // enlever la garvite = 9.81
-//                ay = (Math.abs(ay) - 9.81);
-//            }
-//            if(Math.abs(az)>= 9){ // enlever la garvite = 9.81
-//                az = (Math.abs(az) - 9.81);
-//            }
-
             double a = Math.sqrt(Math.pow(ax, 2) + Math.pow(ay, 2)
                     + Math.pow(az, 2));
             if (a > 9) { // enlever la garvite = 9.81
@@ -384,11 +377,14 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
                 initialSpeed = 0.0;
 
             timeStart.setTime(System.currentTimeMillis());
-        } else if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
-            fTemp.setText(Double.toString(event.values[0]));
-        }else if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
-            fHumidity.setText(Double.toString(event.values[0]));
         }
+        if (event.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            fTemp.setText(Double.toString(Math.floor(event.values[0]))+" C");
+        }
+        if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
+            fHumidity.setText(Double.toString(Math.floor(event.values[0]))+" %");
+        }
+
 
         runThread();
     }
