@@ -185,7 +185,7 @@ public class Parseur {
             Participant participant= new Participant();
             participant.setId(json.getJSONObject(i).getString("idparticipant"));
             participant.setCourriel(json.getJSONObject(i).getString("courriel"));
-            participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
+            //participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
             participant.setIdPosition(json.getJSONObject(i).getString("position_idposition"));
             participant.setRank((int) json.getJSONObject(i).getDouble("rank"));
             participant.setDistanceParcourue(json.getJSONObject(i).getDouble("distance_run"));

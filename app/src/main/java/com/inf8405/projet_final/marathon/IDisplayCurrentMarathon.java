@@ -60,10 +60,10 @@ import javax.xml.parsers.ParserConfigurationException;
 public class IDisplayCurrentMarathon extends Activity implements SensorEventListener {
     final int RQS_GooglePlayServices = 1;
     private GoogleMap fMap;
-    private double fStartPointLatitude = 45.4877866;
-    private double fStartPointLongitude = -73.633085;
-    private double fEndPointLatitude = 45.5032186;
-    private double fEndPointLongitude = -73.6261043;
+    double fStartPointLatitude = 45.5024062;
+    double fStartPointLongitude = -73.6282954;
+    double fEndPointLatitude = 45.5006058;
+    double fEndPointLongitude = -73.6262171;
     private String fMarathonName;
     private TextView f1stNom = null;
     private TextView f2ndNom = null;

@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,7 +41,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,6 +48,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -72,6 +73,14 @@ public class IDisplayHistoricMarathon extends Activity {
     private String latLongFromAdd = "";
     MarkerOptions markerOptions;
     private GeocodingLocation fLocationAddress;
+    private Map<String,Marathon> fHistoricMarathonMap;
+    private Marathon fHistoricMarathon;
+    private Map<String,Participant> fWinnersParticipants;
+    private ArrayList<Participant> fWinnersParticipantsList;
+    private LatLng fSrcLatLng;
+    private LatLng fDesLatLng;
+    private Marker fMarkerP1;
+    private LatLng fP1LatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,19 @@ public class IDisplayHistoricMarathon extends Activity {
         setContentView(R.layout.activity_display_historic_marathon);
         Bundle marathonNameBundle = getIntent().getExtras();
         fMarathonName = marathonNameBundle.getString("marathonName");
+
+         /* Get actual marathon map */
+        fHistoricMarathonMap = DBContent.getInstance().getListHistoricMarathon();
+        for(Map.Entry<String, Marathon> entry : fHistoricMarathonMap.entrySet())
+        {
+            if(entry.getValue().getNom().equals(fMarathonName)){
+                fHistoricMarathon = entry.getValue();
+                fStartPointLatitude = entry.getValue().getPositionDepartLatitude();
+                fStartPointLongitude = entry.getValue().getPositionDepartLongitude();
+                fEndPointLatitude = entry.getValue().getPositionArriveeLatitude();
+                fEndPointLongitude = entry.getValue().getPositionArriveeLongitude();
+            }
+        }
 
         FragmentManager myFragmentManager = getFragmentManager();
         MapFragment myMapFragment = (MapFragment) myFragmentManager.findFragmentById(R.id.MAP_DM);
@@ -89,10 +111,18 @@ public class IDisplayHistoricMarathon extends Activity {
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DM);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DM);
 
-        fDistance.setText("Pas encore calculé!");
-        fHumidity.setText("Pas encore calculé!");
-        fTemp.setText("Pas encore calculé!");
-        fHumidity.setText("Pas encore calculé!");
+        fWinnersParticipantsList = new ArrayList<>();
+        /* Get the first 3 winners */
+        fWinnersParticipants = DBContent.getInstance().getWinnersParticipant(fHistoricMarathon.getId());
+        for(Map.Entry<String, Participant> entry : fWinnersParticipants.entrySet())
+        {
+            fWinnersParticipantsList.add(entry.getValue());
+        }
+        f1stNom.setText(fWinnersParticipantsList.get(0).getCourriel().substring(0, fWinnersParticipantsList.get(0).getCourriel().indexOf('@'))+", "+String.valueOf((int) fWinnersParticipantsList.get(0).getAverageSpeed())+" Km/h");
+
+        fDistance.setText(String.valueOf(fHistoricMarathon.getDistance()) + " m");
+        fHumidity.setText(String.valueOf(fHistoricMarathon.getHumidity())+ " %");
+        fTemp.setText(String.valueOf(fHistoricMarathon.getTemperature()) + " C");
 
         fBtnRevenirMM = (Button) findViewById(R.id.BTN_Return_DM);
 
@@ -105,42 +135,26 @@ public class IDisplayHistoricMarathon extends Activity {
             }
         });
 
-        /* Display path */
-         /* get longitude and latitude of start point address */
-        fLocationAddress = new GeocodingLocation();
-        fLocationAddress.getAddressFromLocation(fStartPoint, getApplicationContext(), new GeocoderHandler());
-        /* Display start point flag */
-//        fStartPointLatitude = fLatitudeFromAddress;
-//        fStartPointLongitude = fLongitudeFromAddress;
-//        LatLng latLngSP = new LatLng(fStartPointLatitude, fStartPointLongitude);
-//        MarkerOptions optionsSP = new MarkerOptions().position(latLngSP).title("Start point");
-//        fMap.addMarker(optionsSP);
-//        float zoomLevelSP = 16; //This goes up to 21
-//        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngSP, zoomLevelSP));
 
-        /* get longitude and latitude of end point address */
-        fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
-        /* Display start point flag */
-//        fEndPointLatitude = fLatitudeFromAddress;
-//        fEndPointLongitude = fLongitudeFromAddress;
-//        LatLng latLngEP = new LatLng(fEndPointLatitude, fEndPointLongitude);
-//        MarkerOptions optionsEP = new MarkerOptions().position(latLngEP).title("End point");
-//        fMap.addMarker(optionsEP);
-//        float zoomLevelEP = 16; //This goes up to 21
-//        fMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngEP, zoomLevelEP));
+        /* Create start and end point of marathon path */
+        fSrcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
+        fDesLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
+        for(int k = 0 ; k < fWinnersParticipantsList.size(); k++){
+            fWinnersParticipantsList.get(k).setPosition(DBContent.getInstance().GetUserPosition(fWinnersParticipantsList.get(k).getId(), fHistoricMarathon.getId()));
+        }
 
 
+        fP1LatLng = new LatLng(fWinnersParticipantsList.get(0).getPosition().getLatitude(), fWinnersParticipantsList.get(0).getPosition().getLongitude());
+        fMarkerP1 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP1LatLng.latitude, fP1LatLng.longitude)).title("First").snippet("participant"));
 
         LatLng srcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
         LatLng destLatLng = new LatLng(fEndPointLatitude, fEndPointLongitude);
 
-        fMap.addMarker(new MarkerOptions()
-                .position(srcLatLng).title("Source place"));
+        fMap.addMarker(new MarkerOptions().position(srcLatLng).title("Start point"));
 
         fMap.animateCamera(CameraUpdateFactory.newLatLng(srcLatLng));
 
-        fMap.addMarker(new MarkerOptions()
-                .position(destLatLng).title("Destination place"));
+        fMap.addMarker(new MarkerOptions().position(destLatLng).title("End point"));
 
         // Enabling MyLocation in Google Map
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
