@@ -19,9 +19,9 @@ public class Parseur {
             Participant participant= new Participant();
             participant.setId(json.getJSONObject(i).getString("idparticipant"));
             participant.setCourriel(json.getJSONObject(i).getString("courriel"));
-            //participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
+            participant.setPhotoEn64(json.getJSONObject(i).getString("photo"));
             participant.setIdPosition(json.getJSONObject(i).getString("position_idposition"));
-            //participant.setPassword(json.getJSONObject(i).getString("password"));
+            participant.setPassword(json.getJSONObject(i).getString("password"));
             participantMap.put(participant.getId(), participant);
         }
         return participantMap;
