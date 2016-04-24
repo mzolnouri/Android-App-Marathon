@@ -1,8 +1,7 @@
 package com.inf8405.projet_final.marathon;
 
-/**
- * Created by youssef on 04/04/2016.
- */
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
 
 import java.sql.Timestamp;
 import java.text.ParseException;

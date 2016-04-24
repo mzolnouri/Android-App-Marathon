@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -55,9 +58,6 @@ public class FNavHome extends Fragment {
         fActalMarathonsListZapas = (ArrayList<String>) new ArrayList<String>();
         homeView = inflater.inflate(R.layout.activity_nav_home, container, false);
 
-        //fMarathons = DBContent.getInstance().getListHistoricMarathon();
-        /* <Just for test> */
-
         /* Get historic marathon map */
         fHistoricMarathonMap = DBContent.getInstance().getListHistoricMarathon();
         fListView = (ListView) homeView.findViewById(R.id.lstVw_Marathons_FNH);
@@ -86,7 +86,6 @@ public class FNavHome extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rdBtnLMH:
-                        //fMarathons = DBContent.getInstance().getListHistoricMarathon();
                         isHistoricMarathonListSelected = true;
                         if (fHistoricMarathonsList != null) {
                             Log.e("count", "" + fHistoricMarathonsList.size());
@@ -104,7 +103,6 @@ public class FNavHome extends Fragment {
 
                         break;
                     case R.id.rdBtnLMA:
-                        //fMarathons = DBContent.getInstance().getListActualMarathon();
                         isHistoricMarathonListSelected = false;
                         if (fActalMarathonsList != null) {
                             Log.e("count", "" + fActalMarathonsList.size());
@@ -124,9 +122,6 @@ public class FNavHome extends Fragment {
             }
         });
 
-        //fResolver = this.getContentResolver();
-
-
         if (fHistoricMarathonsList != null) {
             Log.e("count", "" + fHistoricMarathonsList.size());
             if (fHistoricMarathonsList.size() == 0) {
@@ -141,14 +136,10 @@ public class FNavHome extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     if (isHistoricMarathonListSelected) {
-                        //DBContent dbContent=DBContent.getInstance();
-                        //Marathon marathonData = fMarathons.get(i);
                         Toast.makeText(getContext(), "You've selected: " + fHistoricMarathonsList.get(i), Toast.LENGTH_LONG).show();
                         ShowMarathonPath(view, i);
                     }
                     else{
-                        //DBContent dbContent=DBContent.getInstance();
-                        //Marathon marathonData = fMarathons.get(i);
                         Toast.makeText(getContext(), "You've selected: " + fActalMarathonsList.get(i), Toast.LENGTH_LONG).show();
                         ShowMarathonPath(view, i);
                     }

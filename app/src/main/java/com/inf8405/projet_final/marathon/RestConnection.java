@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.util.Log;
 import java.io.IOException;
 import okhttp3.MediaType;
@@ -8,10 +11,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
-/**
- * Created by youssef on 02/04/2016.
- */
 public final class RestConnection {
         public static final MediaType JSON
                 = MediaType.parse("application/json; charset=utf-8");

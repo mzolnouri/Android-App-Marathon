@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -124,9 +127,7 @@ public class IMainMenu extends AppCompatActivity
                 break;
 
             case R.id.nav_singout:
-                fragment_ = new FNavHome();
-                title  = "Home";
-                viewIsAtHome_ = true;
+                finish();
                 break;
         }
 

@@ -1,7 +1,6 @@
 package com.inf8405.projet_final.marathon;
 
-
-// INF8405 - Laboratoire 2
+// INF8405 - Projet final
 //Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
 
 import android.app.Activity;
@@ -10,6 +9,8 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -17,6 +18,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -70,6 +72,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
     private TextView f2ndNom = null;
     private TextView f3rdNom = null;
     private TextView fMeNom = null;
+    private TextView fBattry = null;
     private TextView fMeAcceleration = null;
     private TextView fDistance = null;
     private TextView fTemp = null;
@@ -146,6 +149,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         f2ndNom = (TextView) findViewById(R.id.TV_2ndNTS_Nom_Value_DMA);
         f3rdNom = (TextView) findViewById(R.id.TV_3rdNTS_Nom_Value_DMA);
         fMeNom = (TextView) findViewById(R.id.TV_MeNTS_Nom_Value_DMA);
+        fBattry = (TextView) findViewById(R.id.TV_Battry_Value_DMA);
         fDistance = (TextView) findViewById(R.id.TV_Dis_Value_DMA);
         fTemp = (TextView) findViewById(R.id.TV_Temp_Value_DMA);
         fHumidity = (TextView) findViewById(R.id.TV_Hum_Value_DMA);
@@ -179,12 +183,8 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         });
 
         /* Display path */
-         /* get longitude and latitude of start point address */
-        fLocationAddress = new GeocodingLocation();
-        //fLocationAddress.getAddressFromLocation(fStartPoint, getApplicationContext(), new GeocoderHandler());
 
-        /* get longitude and latitude of end point address */
-        //fLocationAddress.getAddressFromLocation(fEndPoint, getApplicationContext(), new GeocoderHandler());
+        fLocationAddress = new GeocodingLocation();
 
         /* Create start and end point of marathon path */
         fSrcLatLng = new LatLng(fStartPointLatitude, fStartPointLongitude);
@@ -206,12 +206,6 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         fMap.animateCamera(CameraUpdateFactory.newLatLng(fSrcLatLng));
 
         fMap.addMarker(new MarkerOptions().position(fDesLatLng).title("Arrival point"));
-
-        //fMap.addMarker(new MarkerOptions().position(fP1LatLng).title("First participant"));
-        //fMap.addMarker(new MarkerOptions().position(fP2LatLng).title("Second participant"));
-        //fMap.addMarker(new MarkerOptions().position(fP3LatLng).title("Third participant"));
-
-
 
         // Enabling MyLocation in Google Map
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -242,13 +236,8 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         timeStart = new Date(System.currentTimeMillis());
         initialSpeed =0.0;
 
-
-        // Polyline line = fMap.addPolyline(new PolylineOptions().add(srcLatLng, destLatLng).width(5).color(Color.RED));
         connectAsyncTask _connectAsyncTask = new connectAsyncTask();
         _connectAsyncTask.execute();
-        //while(true)
-
-
 
     }
 
@@ -272,14 +261,6 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
                                 fMarkerP2 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP2LatLng.latitude, fP2LatLng.longitude)).title("Second").snippet("participant"));
                                 fP3LatLng = new LatLng(fWinnersParticipantsList.get(2).getPosition().getLatitude(), fWinnersParticipantsList.get(2).getPosition().getLongitude());
                                 fMarkerP3 = fMap.addMarker(new MarkerOptions().position(new LatLng(fP3LatLng.latitude, fP3LatLng.longitude)).title("Third").snippet("participant"));
-
-                                // TODO
-                                // position.setTemp()
-                                // position.setHum
-                                // dbcontent.UpdateRemotePosition();
-                                //
-
-
                             }
                         });
                         Thread.sleep(300);
@@ -329,7 +310,19 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
 
     }
 
+    // Method pour Calculer le niveau de batterie
+    public float getBatteryLevel() {
+        Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
+        // Error checking that probably isn't needed but I added just in case.
+        if(level == -1 || scale == -1) {
+            return 50.0f;
+        }
+
+        return ((float)level / (float)scale) * 100.0f;
+    }
     @Override
     public void onSensorChanged(SensorEvent event) {
         double vitesse_x, vitesse_y, vitesse_z;
@@ -375,6 +368,7 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
             initialSpeed = speed;
             if(ax == 0.0 && ay == 0.0 && az == 0.0)
                 initialSpeed = 0.0;
+            fMeNom.setText(fMyname + ", " +Double.toString(Math.floor(initialSpeed*3.6))+"Km/h"); //
 
             timeStart.setTime(System.currentTimeMillis());
         }
@@ -384,8 +378,13 @@ public class IDisplayCurrentMarathon extends Activity implements SensorEventList
         if (event.sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
             fHumidity.setText(Double.toString(Math.floor(event.values[0]))+" %");
         }
+        if(ax == 0.0 && ay == 0.0 && az == 0.0){
+        initialSpeed = 0.0;
+        speed =0.0;
+            fMeNom.setText(fMyname + ", " +Double.toString(Math.floor(initialSpeed*3.6))+"Km/h"); //
+        }
 
-
+        fBattry.setText(String.valueOf(getBatteryLevel()) + "%");
         runThread();
     }
 

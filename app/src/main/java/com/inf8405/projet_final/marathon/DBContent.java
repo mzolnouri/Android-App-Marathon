@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.util.Log;
 
 import org.json.JSONException;
@@ -69,7 +72,7 @@ public class DBContent {
      */
     public String CreerNouvelUtilisateur(final Participant NParticipant)
     {
-        responseStr=Constants.UserNotAdded;
+        responseStr=MConstants.USER_NOT_ADDED;
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 // todo password enregistre localement est dangereux, voir solution alternative
@@ -79,7 +82,7 @@ public class DBContent {
                     String reponsePost = DBConnexion.postRequest("http://najibarbaoui.com/api/insert_participant.php", Parseur.ParseParticipantToJsonFormat(NParticipant));
                     if(reponsePost.contentEquals("1"))
                     {
-                        responseStr=Constants.UserAdded;
+                        responseStr=MConstants.USER_ADDED;
                         participantMap_.put(NParticipant.getId(),NParticipant);
                         actualParticipantId_=NParticipant.getId();
 
@@ -216,7 +219,7 @@ public class DBContent {
     // si positive, renvoit les infos de l<utilisateur sinon renvoit quelle est le probleme
     public String authentification(final String courriel, final String password)
     {
-        responseStr=Constants.WrongEmail;
+        responseStr=MConstants.WRONG_EMAIL;
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 try {

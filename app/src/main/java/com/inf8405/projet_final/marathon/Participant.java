@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -7,9 +10,6 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
-/**
- * Created by youssef on 03/04/2016.
- */
 public class Participant {
 
     private String id;

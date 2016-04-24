@@ -1,5 +1,8 @@
 package com.inf8405.projet_final.marathon;
 
+// INF8405 - Projet final
+//Auteurs : Najib Arbaoui (1608366) && Youssef Zemmahi (1665843) && Zolnouri Mahdi (1593999)
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,9 +15,6 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by mahdi zolnouri on 16-03-24.
- */
 public class ISignIn extends AppCompatActivity {
     // UI references.
     private EditText fEmailView;
